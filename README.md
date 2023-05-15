@@ -13,7 +13,7 @@ Make sure you have these installed before you proceed with the next steps.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/DuThomas/strategInTest
+   git clone git@github.com:DuThomas/strategInTest.git
    cd ./strategInTest
    ```
 
