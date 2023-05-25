@@ -42,6 +42,8 @@ Registers a new user with the given email and password.
 
 ```bash
 # Register
+
+# Unix
 curl \
     --request POST \
     --url http://localhost:8080/register \
@@ -63,6 +65,8 @@ Logs in a user with the given email and password and returns a `JWT token`.
 
 ```bash
 # Login
+
+# Unix
 curl \
     --request POST \
     --url http://localhost:8080/login \
@@ -77,6 +81,29 @@ curl \
 - `401 Unauthorized`: Incorrect email or password.
 - `404 Not Found`: Email not Found.
 
+### Delete user
+
+**Endpoint:** `POST /delete`
+
+Deletes a user with the given email.
+
+```bash
+# Delete user
+
+# Unix
+curl \
+    --request POST \
+    --url http://localhost:8080/delete \
+    --header 'Content-Type: application/json' \
+    --data '{ "email": "your@email.com" }'
+```
+
+**Responses:**
+
+- `200 OK`: User successfully deleted.
+- `400 Bad Request`: Invalid request body / email is missing.
+- `404 Not Found`: Email not Found.
+
 ### Get all users
 
 **Endpoint:** `GET /users`
@@ -85,6 +112,8 @@ Insert that `JWT token` in the next command to access **/users** route and get t
 
 ```bash
 # Gets a list of all users
+
+# Unix
 curl \
     --request GET \
     --url http://localhost:8080/users \

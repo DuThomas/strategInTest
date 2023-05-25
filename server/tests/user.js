@@ -84,7 +84,7 @@ describe('User API', () => {
   describe('POST /login', () => {
     const email = 'test123@example.com'
     const password = 'testPassword132'
-    const user = new User({email, password})
+    const user = new User({ email, password })
 
     before((done) => {
       // Clear db
@@ -101,7 +101,7 @@ describe('User API', () => {
       const email = "not.existing@email.com"
       chai.request(app)
         .post('/login')
-        .send({email, password})
+        .send({ email, password })
         .end((err, res) => {
           expect(res).to.have.status(404)
           expect(res.body).to.be.an('object')
@@ -114,7 +114,7 @@ describe('User API', () => {
       const password = "WrongPassword"
       chai.request(app)
         .post('/login')
-        .send({email, password})
+        .send({ email, password })
         .end((err, res) => {
           expect(res).to.have.status(401)
           expect(res.body).to.be.an('object')
@@ -136,6 +136,69 @@ describe('User API', () => {
         .catch((error) => done(error))
     })
   })
+
+
+  describe('POST /delete', () => {
+    beforeEach((done) => {
+      const email = 'test123@example.com'
+      const password = 'testPassword132'
+      const user = new User({ email, password })
+      // Clear db
+      mongoose.connection.collections.users.drop()
+
+      // Add user to db
+      user.save()
+        .then(() => {
+          done()
+        })
+        .catch((error) => {
+          done(error)
+        })
+    })
+
+    it('should delete the user and return that deleted user if email does exist', (done) => {
+      const email = 'test123@example.com'
+      chai.request(app)
+        .post('/delete')
+        .send({ email })
+        .then((res) => {
+          expect(res).to.have.status(200)
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.property('deletedUser')
+          expect(res.body).to.have.property('message', 'User successfully deleted')
+          done()
+        })
+        .catch((error) => done(error))
+    })
+
+    it('should return an error if email does not exist', (done) => {
+      const email = "not.existing@email.com"
+      chai.request(app)
+        .post('/delete')
+        .send({ email })
+        .then((res) => {
+          expect(res).to.have.status(404)
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.property('error', 'Email not found')
+          done()
+        })
+        .catch((error) => done(error))
+    })
+
+    it('should return an error if email not given', (done) => {
+      chai.request(app)
+        .post('/delete')
+        .send()
+        .then((res) => {
+          expect(res).to.have.status(400)
+          expect(res.body).to.be.an('object')
+          expect(res.body).to.have.property('error', 'Email is required')
+          done()
+        })
+        .catch((error) => done(error))
+    })
+  })
+
 
   describe('GET /users', () => {
     const email = 'test123@example.com'

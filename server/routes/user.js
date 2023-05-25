@@ -1,4 +1,4 @@
-import { register, login, getUsers } from "../controllers/user.js"
+import { register, login, getUsers, deleteUser } from "../controllers/user.js"
 import { Router } from "express"
 import { check } from 'express-validator'
 import auth from '../middleware/auth.js'
@@ -31,6 +31,19 @@ router
     })
   })
   .post(login)
+
+  router
+  .route('/update')
+  .get((req, res) => {
+    return res.status(200).json({
+      message: "login page",
+    })
+  })
+  .post(login)
+
+router
+  .route('/delete')
+  .post(deleteUser)
 
 router
   .route('/users')
