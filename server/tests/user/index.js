@@ -1,7 +1,7 @@
-import chai from 'chai'
+import chai, { use } from 'chai'
 import chaiHttp from 'chai-http'
-import app from '../index.js'
-import User from '../models/user.js'
+import app from '../../index.js'
+import User from '../../models/user.js'
 import mongoose from 'mongoose'
 
 const { expect } = chai
@@ -15,71 +15,6 @@ describe('User API', () => {
     password: 'myPassword'
   }
   const {email, password} = user
-
-  describe('POST /register', () => {
-    beforeEach((done) => {
-      // Clear db
-      mongoose.connection.collections.users.drop(() => {
-          done()
-      })
-    })
-    it('should register a new user with valid email and password', (done) => {
-      chai.request(app)
-        .post('/register')
-        .send(user)
-        .end((err, res) => {
-          expect(res).to.have.status(201)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('newUser')
-          expect(res.body.newUser).to.have.property('email').equal(email)
-          done()
-        })
-    })
-
-    it('should return an error if email already used', (done) => {
-      chai.request(app) // add an user
-        .post('/register')
-        .send(user)
-        .then(() => {
-          chai.request(app) // add the same user
-            .post('/register')
-            .send(user)
-            .end((error, res) => {
-              expect(res).to.have.status(409)
-              expect(res.body).to.be.an('object')
-              expect(res.body).to.have.property('error', 'Email is already used')
-              done()
-            })
-        })
-    })
-
-    it('should return an error if email is not valid', (done) => {
-      const email = 'invalidEmail'
-      chai.request(app)
-        .post('/register')
-        .send({email, password})
-        .end((error, res) => {
-          expect(res).to.have.status(400)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('error', 'Email must be valid')
-          done()
-        })
-    })
-
-    it('should return an error if password is less than 8 characters', (done) => {
-      const password = '1234567'
-      chai.request(app)
-        .post('/register')
-        .send({email, password})
-        .end((error, res) => {
-          expect(res).to.have.status(400)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('error', 'Password should be at least 8 characters')
-          done()
-        })
-    })
-  })
-
 
   describe('POST /login', () => {
     const email = 'test123@example.com'
@@ -138,68 +73,6 @@ describe('User API', () => {
   })
 
 
-  describe('POST /delete', () => {
-    beforeEach((done) => {
-      const email = 'test123@example.com'
-      const password = 'testPassword132'
-      const user = new User({ email, password })
-      // Clear db
-      mongoose.connection.collections.users.drop()
-
-      // Add user to db
-      user.save()
-        .then(() => {
-          done()
-        })
-        .catch((error) => {
-          done(error)
-        })
-    })
-
-    it('should delete the user and return that deleted user if email does exist', (done) => {
-      const email = 'test123@example.com'
-      chai.request(app)
-        .post('/delete')
-        .send({ email })
-        .then((res) => {
-          expect(res).to.have.status(200)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('deletedUser')
-          expect(res.body).to.have.property('message', 'User successfully deleted')
-          done()
-        })
-        .catch((error) => done(error))
-    })
-
-    it('should return an error if email does not exist', (done) => {
-      const email = "not.existing@email.com"
-      chai.request(app)
-        .post('/delete')
-        .send({ email })
-        .then((res) => {
-          expect(res).to.have.status(404)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('error', 'Email not found')
-          done()
-        })
-        .catch((error) => done(error))
-    })
-
-    it('should return an error if email not given', (done) => {
-      chai.request(app)
-        .post('/delete')
-        .send()
-        .then((res) => {
-          expect(res).to.have.status(400)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('error', 'Email is required')
-          done()
-        })
-        .catch((error) => done(error))
-    })
-  })
-
-
   describe('GET /users', () => {
     const email = 'test123@example.com'
     const password = 'testPassword132'
@@ -215,7 +88,7 @@ describe('User API', () => {
         })
     })
 
-    it('should access to /users and get users list if user have valid jwtToken', (done) => {
+    it('should access to /users and get users list if user has valid jwtToken', (done) => {
       chai.request(app)
         .post('/login')
         .send({email, password})

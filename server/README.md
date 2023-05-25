@@ -49,6 +49,13 @@ curl \
     --url http://localhost:8080/register \
     --header 'Content-Type: application/json' \
     --data '{ "email": "your@email.com", "password": "yourPassword" }'
+
+# Windows Powershell
+Invoke-WebRequest `
+  -Uri http://localhost:8080/register `
+  -Method POST `
+  -ContentType 'application/json' `
+  -Body '{ "email": "your@email.com", "password": "yourPassword" }'
 ```
 
 **Responses:**
