@@ -8,7 +8,6 @@ import { afterEach } from 'mocha'
 const { expect } = chai
 
 chai.use(chaiHttp)
-chai.should()
 
 describe('POST /update', () => {
 	let session

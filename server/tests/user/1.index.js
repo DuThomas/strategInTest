@@ -2,102 +2,110 @@ import chai, { use } from 'chai'
 import chaiHttp from 'chai-http'
 import app from '../../index.js'
 import User from '../../models/user.js'
-import mongoose from 'mongoose'
+import mongoose, { startSession } from 'mongoose'
 
 const { expect } = chai
 
 chai.use(chaiHttp)
-chai.should()
 
 describe('User API', () => {
-  const user = {
-    email: 'test@example.com',
-    password: 'myPassword'
-  }
-  const {email, password} = user
+  let session
+  const email = 'test123@example.com'
+	const password = 'testPassword132'
+
+  beforeEach(async () => {
+    session = await startSession()
+    session.startTransaction()
+
+    try {
+      const user = new User({ email, password })
+      await User.deleteMany() // Clear users
+      await user.save() // Add user to db
+    } catch (error) {
+      throw new Error(error)
+    }
+  })
+
+  afterEach(async () => {
+    try {
+      await session.commitTransaction()
+    } catch (error) {
+      await session.abortTransaction()
+    } finally {
+      session.endSession()
+    }
+  })
 
   describe('GET /users', () => {
-    const email = 'test123@example.com'
-    const password = 'testPassword132'
-    const user = new User({email, password})
-    before((done) => {
-      // Clear db
-      mongoose.connection.collections.users.drop()
+    it('should access to /users and get users list if user has valid jwtToken', async () => {
+      try {
+        const loginRes = await chai.request(app)
+          .post('/login')
+          .send({ email, password })
 
-      // Add user to db
-      user.save()
-        .then(() => {
-          done()
-        })
+        const jwtToken = loginRes.body.jwtToken;
+        const usersRes = await chai.request(app)
+          .get('/users')
+          .set('Authorization', `Bearer ${jwtToken}`)
+    
+        expect(usersRes).to.have.status(200)
+        expect(usersRes.body).to.be.an('object')
+        expect(usersRes.body).to.have.property('emails').that.is.an('array')
+      } catch (error) {
+        throw new Error(error)
+      }
     })
 
-    it('should access to /users and get users list if user has valid jwtToken', (done) => {
-      chai.request(app)
-        .post('/login')
-        .send({email, password})
-        .then((res) => {
-          // get a jwtToken after logging in
-          const jwtToken = res.body.jwtToken
-          chai.request(app)
-            .get('/users')
-            .set('Authorization', `Bearer ${jwtToken}`)
-            .then((res) => {
-              expect(res).to.have.status(200)
-              expect(res.body).to.be.an('object')
-              expect(res.body).to.have.property('emails').that.is.an('array')
-              done()
-            })
-            .catch((error) => done(error))
-        })
-        .catch((error) => done(error))
+    it('should return an error if the user tries accessing /users with an invalid jwtToken.', async () => {
+      try {
+        const jwtToken = 'invalidJwtToken'
+        const res = await chai.request(app)
+          .get('/users')
+          .set('Authorization', `Bearer ${jwtToken}`)
+  
+        expect(res).to.have.status(401)
+        expect(res.body).to.be.an('object')
+        expect(res.body).to.have.property('error', 'Invalid token')
+      } catch (error) {
+        throw new Error(error)
+      }
     })
 
-    it('should return an error if the user tries accessing /users with an invalid jwtToken.', (done) => {
-      const jwtToken = 'invalidJwtToken'
-      chai.request(app)
-        .get('/users')
-        .set('Authorization', `Bearer ${jwtToken}`)
-        .then((res) => {
-          expect(res).to.have.status(401)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('error', 'Invalid token')
-          done()
-        })
-        .catch((error) => done(error))
-    })
-
-    it('should return an error if the user tries accessing /users without jwtToken.', (done) => {
-      chai.request(app)
-        .get('/users')
-        .then((res) => {
-          expect(res).to.have.status(401)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('error', 'No token')
-          done()
-        })
-        .catch((error) => done(error))
+    it('should return an error if the user tries accessing /users without jwtToken.', async () => {
+      try {
+        const res = await chai.request(app)
+          .get('/users')
+  
+        expect(res).to.have.status(401)
+        expect(res.body).to.be.an('object')
+        expect(res.body).to.have.property('error', 'No token')
+      } catch (error) {
+        throw new Error(error)
+      }
     })
   })
 
   describe('GET /login', () => {
-    it('should access to /login', (done) => {
-      chai.request(app)
-        .get('/login')
-        .end((req, res) => {
-          res.should.have.status(200)
-          done()
-        })
-    })
+    try {
+      it('should access to /login', async () => {
+        const res = await chai.request(app)
+          .get('/login')
+        expect(res).to.have.status(200)
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
   })
   
   describe('GET /register', () => {
-    it('should access to /register', (done) => {
-      chai.request(app)
-        .get('/register')
-        .end((req, res) => {
-          res.should.have.status(200)
-          done()
-        })
+    it('should access to /register', async () => {
+      try {
+        const res = await chai.request(app)
+          .get('/register')
+        expect(res).to.have.status(200)
+      } catch (error) {
+        throw new Error(error)
+      }
     })
   })
 })

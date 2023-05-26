@@ -8,7 +8,6 @@ import { afterEach } from 'mocha'
 const { expect } = chai
 
 chai.use(chaiHttp)
-chai.should()
 
 describe('POST /login', () => {
 	let session
@@ -20,6 +19,7 @@ describe('POST /login', () => {
 	beforeEach(async () => {
 		session = await startSession()
 		session.startTransaction()
+
 		try {
 			const user = new User({ email, password })
 			await User.deleteMany() // Clear users
@@ -40,13 +40,17 @@ describe('POST /login', () => {
 	})
 
 	it('should login and return a token if password matches to email', async () => {
-		const res = await chai.request(app)
-			.post('/login')
-			.send({ email, password })
-
-		expect(res).to.have.status(200)
-		expect(res.body).to.be.an('object')
-		expect(res.body).to.have.property('jwtToken')
+		try {
+			const res = await chai.request(app)
+				.post('/login')
+				.send({ email, password })
+	
+			expect(res).to.have.status(200)
+			expect(res.body).to.be.an('object')
+			expect(res.body).to.have.property('jwtToken')
+		} catch (error) {
+			throw new Error(error)
+		}
 	})
 
 	it('should return an error if email is not given', async () => {
@@ -64,15 +68,19 @@ describe('POST /login', () => {
 	})
 
 	it('should return an error if email does not exist', async () => {
-		const res = await chai.request(app)
-			.post('/login')
-			.send({
-				email: notExistingEmail,
-				password
-			})
-		expect(res).to.have.status(404)
-		expect(res.body).to.be.an('object')
-		expect(res.body).to.have.property('error', 'Email not found')
+		try {
+			const res = await chai.request(app)
+				.post('/login')
+				.send({
+					email: notExistingEmail,
+					password
+				})
+			expect(res).to.have.status(404)
+			expect(res.body).to.be.an('object')
+			expect(res.body).to.have.property('error', 'Email not found')
+		} catch (error) {
+			throw new Error(error)
+		}
 	})
 
 	it('should return an error if password is not given', async () => {
@@ -90,14 +98,18 @@ describe('POST /login', () => {
 	})
 
 	it('should return an error if password is wrong', async () => {
-		const res = await chai.request(app)
-			.post('/login')
-			.send({
-				email,
-				password: wrongPassword
-			})
-		expect(res).to.have.status(401)
-		expect(res.body).to.be.an('object')
-		expect(res.body).to.have.property('error', 'Email and password do not match')
+		try {
+			const res = await chai.request(app)
+				.post('/login')
+				.send({
+					email,
+					password: wrongPassword
+				})
+			expect(res).to.have.status(401)
+			expect(res.body).to.be.an('object')
+			expect(res.body).to.have.property('error', 'Email and password do not match')
+		} catch (error) {
+			throw new Error(error)
+		}
 	})
 })
