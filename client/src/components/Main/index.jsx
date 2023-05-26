@@ -1,9 +1,4 @@
 const Main = () => {
-	const handleLogout = () => {
-		localStorage.removeItem("token");
-		window.location.reload();
-	};
-
 	return (
 		<div>
 			<p>Strateg.In</p>
@@ -49,4 +44,4 @@ const Main = () => {
 	)
 }
 
-export default Main;
+export default Main

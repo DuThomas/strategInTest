@@ -12,27 +12,27 @@ const Users = () => {
 		window.location = 'http://localhost:3000/login'
 	}
 
-	const [users, setUsers] = useState([]);
+	const [users, setUsers] = useState([])
 
   useEffect(() => {
-		const jwtToken = localStorage.getItem("token");
-		console.log('jwt:', jwtToken)
-    fetch('http://localhost:8080/users', {
-			method: 'GET',
-			headers: {
-				Authorization: `Bearer ${jwtToken}`
+		const jwtToken = localStorage.getItem("token")
+
+    const fetchUsers = async () => {
+			try {
+				const res = await fetch('http://localhost:8080/users', {
+					method: 'GET',
+					headers: {
+						Authorization: `Bearer ${jwtToken}`
+					}
+				})
+				const data = await res.json()
+				setUsers(data.emails)
+			} catch (error) {
+				throw new Error(error)
 			}
-		})
-		.then((res) => {
-			return res.json()
-		})
-		.then(data => {
-			setUsers(data.emails)
-		})
-		.catch(error => {
-			console.error('Erreur lors de la récupération des utilisateurs:', error);
-		});
-  }, []);
+		}
+		fetchUsers()
+  }, [])
 
 	return (
 		<div>
@@ -58,7 +58,7 @@ const Users = () => {
 				</div>
 			}
 		</div>
-	);
-};
+	)
+}
 
-export default Users;
+export default Users

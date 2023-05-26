@@ -5,13 +5,12 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import userRoutes from './routes/user.js'
 
-// Connnect to DB
-connection()
+connection() // Connnect to DB
 
 const app = express()
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(cookieParser())
 app.use(cors())
 
@@ -22,7 +21,6 @@ app.use((req, res) => {
     error: "Route not found"
   })
 })
-
 
 app.set('port', process.env.PORT)
 

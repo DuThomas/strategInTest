@@ -3,10 +3,10 @@ import EmailInput from "../EmailInput"
 import PwdInput from "../PwdInput"
 import UserForm from "../UserForm"
 
-const Login = () => {
-	console.log(process.env.TEST);
-	const [data, setData] = useState({ email: "", password: "" })
+const Update = () => {
+	const [data, setData] = useState({ email: "", newEmail: "", newPassword: "" })
 	const [error_msg, setError_msg] = useState("")
+	const [update_msg, setUpdated_msg] = useState("")
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value })
@@ -15,21 +15,22 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const res = await fetch('http://localhost:8080/login', {
+			const res = await fetch('http://localhost:8080/update', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(data)
 			})
-	
 			const resData = await res.json()
-			if (resData.error) {
+			if(resData.error){
 				setError_msg(resData.error)
+				setUpdated_msg('')
 			}
 			else {
-				localStorage.setItem("token", resData.jwtToken)
-				window.location = "http://localhost:3000"
+				setError_msg("")
+				setUpdated_msg('Données mis à jour')
+				setData({ email: "", newEmail: "", newPassword: "" })
 			}
 		} catch (error) {
 			throw new Error(error)
@@ -41,22 +42,26 @@ const Login = () => {
 			placeholder="Email" name="email"
 			onChange={handleChange} value={data.email}
 		/>,
+		<EmailInput
+			placeholder="Nouveau Email" name="newEmail"
+			onChange={handleChange} value={data.newEmail}
+		/>,
 		<PwdInput
-			placeholder="Mot de passe" name="password"
-			onChange={handleChange} value={data.password}
+			placeholder="Nouveau mot de passe" name="newPassword"
+			onChange={handleChange} value={data.newPassword}
 		/>
 	]
 
 	return (
 		<UserForm
-			title="Se connecter"
+			title="Modification"
 			inputs={inputs}
 			handleSubmit={handleSubmit}
 			error_msg={error_msg}
-			btn_text="Se connecter"
+			success_msg={update_msg}
+			btn_text="Enregistrer"
 		/>
 	)
-	
 }
 
-export default Login
+export default Update

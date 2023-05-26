@@ -1,12 +1,11 @@
 import { useState } from "react"
 import EmailInput from "../EmailInput"
-import PwdInput from "../PwdInput"
 import UserForm from "../UserForm"
 
-const Login = () => {
-	console.log(process.env.TEST);
-	const [data, setData] = useState({ email: "", password: "" })
+const Delete = () => {
+	const [data, setData] = useState({ email: ""})
 	const [error_msg, setError_msg] = useState("")
+	const [deleted_msg, setDeleted_msg] = useState("")
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value })
@@ -15,7 +14,7 @@ const Login = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const res = await fetch('http://localhost:8080/login', {
+			const res = await fetch('http://localhost:8080/delete', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -24,39 +23,37 @@ const Login = () => {
 			})
 	
 			const resData = await res.json()
-			if (resData.error) {
+			if(resData.error){
 				setError_msg(resData.error)
+				setDeleted_msg('')
 			}
 			else {
-				localStorage.setItem("token", resData.jwtToken)
-				window.location = "http://localhost:3000"
+				setError_msg("")
+				setDeleted_msg(`${data.email} à été suppprimé`)
+				setData({ email: "" })
 			}
 		} catch (error) {
 			throw new Error(error)
 		}
 	}
-
+	
 	const inputs = [
 		<EmailInput
 			placeholder="Email" name="email"
 			onChange={handleChange} value={data.email}
-		/>,
-		<PwdInput
-			placeholder="Mot de passe" name="password"
-			onChange={handleChange} value={data.password}
 		/>
 	]
 
 	return (
 		<UserForm
-			title="Se connecter"
+			title="Supprimer un utilisateur"
 			inputs={inputs}
 			handleSubmit={handleSubmit}
 			error_msg={error_msg}
-			btn_text="Se connecter"
+			success_msg={deleted_msg}
+			btn_text="Supprimer"
 		/>
 	)
-	
 }
 
-export default Login
+export default Delete
