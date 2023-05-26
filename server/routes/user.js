@@ -30,7 +30,10 @@ router
       message: "login page",
     })
   })
-  .post(login)
+  .post([
+    check("email", "Email is required and must be valid").exists().isEmail(),
+    check("password", "Password is required and should be at least 8 characters").exists().isLength({min: 8})
+  ], login)
 
   router
   .route('/update')

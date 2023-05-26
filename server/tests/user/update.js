@@ -12,13 +12,12 @@ chai.should()
 
 describe('POST /update', () => {
 	let session
+	const email = 'test123@example.com'
+  const password = 'testPassword132'
 
 	beforeEach(async () => {
     session = await startSession()
     session.startTransaction()
-
-    const email = 'test123@example.com'
-    const password = 'testPassword132'
     const user = new User({ email, password })
     try {
       await User.deleteMany() // Clear users

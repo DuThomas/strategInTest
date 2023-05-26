@@ -12,23 +12,18 @@ chai.should()
 
 describe('POST /login', () => {
 	let session
-
 	const email = 'test123@example.com'
 	const password = 'testPassword132'
-	const user = new User({ email, password })
+	const notExistingEmail = "not.existing@email.com"
+	const wrongPassword = 'WrongPassword'
 
 	beforeEach(async () => {
 		session = await startSession()
 		session.startTransaction()
-
-		const email = 'test123@example.com'
-		const password = 'testPassword132'
-		const user = new User({ email, password })
 		try {
-			// Clear users
-			await User.deleteMany()
-			// Add user to db
-			await user.save()
+			const user = new User({ email, password })
+			await User.deleteMany() // Clear users
+			await user.save() // Add user to db
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -44,42 +39,65 @@ describe('POST /login', () => {
 		}
 	})
 
-	it('should return an error if email does not exist', (done) => {
-		const email = "not.existing@email.com"
-		chai.request(app)
+	it('should login and return a token if password matches to email', async () => {
+		const res = await chai.request(app)
 			.post('/login')
 			.send({ email, password })
-			.end((err, res) => {
-				expect(res).to.have.status(404)
-				expect(res.body).to.be.an('object')
-				expect(res.body).to.have.property('error', 'Email not found')
-				done()
-			})
+
+		expect(res).to.have.status(200)
+		expect(res.body).to.be.an('object')
+		expect(res.body).to.have.property('jwtToken')
 	})
 
-	it('should return an error if password is wrong', (done) => {
-		const password = "WrongPassword"
-		chai.request(app)
-			.post('/login')
-			.send({ email, password })
-			.end((err, res) => {
-				expect(res).to.have.status(401)
-				expect(res.body).to.be.an('object')
-				expect(res.body).to.have.property('error', 'Email and password do not match')
-				done()
-			})
+	it('should return an error if email is not given', async () => {
+		try {
+			const res = await chai.request(app)
+				.post('/login')
+				.send({ password })
+				
+			expect(res).to.have.status(400)
+			expect(res.body).to.be.an('object')
+			expect(res.body).to.have.property('error', 'Email is required and must be valid')
+		} catch (error) {
+			throw new Error(error)
+		}
 	})
 
-	it('should login and return a token if password matches to email', (done) => {
-		chai.request(app)
+	it('should return an error if email does not exist', async () => {
+		const res = await chai.request(app)
 			.post('/login')
-			.send({ email, password })
-			.then((res) => {
-				expect(res).to.have.status(200)
-				expect(res.body).to.be.an('object')
-				expect(res.body).to.have.property('jwtToken')
-				done()
+			.send({
+				email: notExistingEmail,
+				password
 			})
-			.catch((error) => done(error))
+		expect(res).to.have.status(404)
+		expect(res.body).to.be.an('object')
+		expect(res.body).to.have.property('error', 'Email not found')
+	})
+
+	it('should return an error if password is not given', async () => {
+		try {
+			const res = await chai.request(app)
+				.post('/login')
+				.send({ email })
+		
+			expect(res).to.have.status(400)
+			expect(res.body).to.be.an('object')
+			expect(res.body).to.have.property('error', 'Password is required and should be at least 8 characters')
+		} catch (error) {
+			throw new Error(error)
+		}
+	})
+
+	it('should return an error if password is wrong', async () => {
+		const res = await chai.request(app)
+			.post('/login')
+			.send({
+				email,
+				password: wrongPassword
+			})
+		expect(res).to.have.status(401)
+		expect(res.body).to.be.an('object')
+		expect(res.body).to.have.property('error', 'Email and password do not match')
 	})
 })

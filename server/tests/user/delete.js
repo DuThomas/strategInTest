@@ -56,7 +56,6 @@ describe('POST /delete', () => {
       }
   })
 
-
   it('should return an error if email does not exist', async () => {
     try {
       const email = "not.existing@email.com"
