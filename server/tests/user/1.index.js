@@ -2,7 +2,8 @@ import chai, { use } from 'chai'
 import chaiHttp from 'chai-http'
 import app from '../../index.js'
 import User from '../../models/user.js'
-import mongoose, { startSession } from 'mongoose'
+import { startSession } from 'mongoose'
+import { afterEach } from 'mocha'
 
 const { expect } = chai
 
