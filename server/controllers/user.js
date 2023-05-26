@@ -46,7 +46,7 @@ export const login = async (req, res) => {
       error: errors.array()[0].msg
     })
   }
-  
+
   const { email, password } = req.body
 
   try {
@@ -79,17 +79,6 @@ export const login = async (req, res) => {
 
 
 export const updateUser = async (req, res) => {
-  // console.log("update")
-
-  // try {
-  //   const users = await User.find()
-  //   console.log(users)
-  // } catch (error) {
-  //   return res.status(400).json({
-  //     error: error.message
-  //   })
-  // }
-
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).json({
@@ -98,7 +87,6 @@ export const updateUser = async (req, res) => {
   }
 
   const { email, newEmail, newPassword } = req.body
-
   try {
     const userWithSameNewEmail = await User.findOne({ email: newEmail})
     if (userWithSameNewEmail) {

@@ -60,7 +60,7 @@ Invoke-WebRequest `
 
 **Responses:**
 
-- `201 Created`: User successfully registered.
+- `201 Created`: User registered successfully.
 - `400 Bad Request`: Invalid request body.
 - `409 Conflict`: Email is already used.
 
@@ -79,13 +79,50 @@ curl \
     --url http://localhost:8080/login \
     --header 'Content-Type: application/json' \
     --data '{ "email": "your@email.com", "password": "yourPassword" }'
+
+# Windows Powershell
+Invoke-WebRequest `
+    -Method POST `
+    -Uri 'http://localhost:8080/login' `
+    -Headers @{'Content-Type' = 'application/json'} `
+    -Body '{"email": "your@email.com", "password": "yourPassword"}'
 ```
 
 **Responses:**
 
-- `200 OK`: User successfully logged in and JWT token returned.
+- `200 OK`: User logged in and JWT token returned successfully.
 - `400 Bad Request`: Invalid request body.
 - `401 Unauthorized`: Incorrect email or password.
+- `404 Not Found`: Email not Found.
+
+### Update user
+
+**Endpoint:** `POST /update`
+
+Updates user's data with the given email.
+
+```bash
+# Login
+
+# Unix
+curl \
+    --request POST \
+    --url http://localhost:8080/update \
+    --header 'Content-Type: application/json' \
+    --data ' "email": "your@email.com", "newEmail": "your.new@email.com", "newPassword": "yourNewPassword" }'
+
+# Windows Powershell
+Invoke-WebRequest `
+    -Method POST `
+    -Uri 'http://localhost:8080/update' `
+    -Headers @{'Content-Type' = 'application/json'} `
+    -Body '{ "email": "your@email.com", "newEmail": "your.new@email.com", "newPassword": "yourNewPassword" }'
+```
+
+**Responses:**
+
+- `200 OK`: User's data updated successfully.
+- `400 Bad Request`: Invalid request body.
 - `404 Not Found`: Email not Found.
 
 ### Delete user
@@ -103,11 +140,18 @@ curl \
     --url http://localhost:8080/delete \
     --header 'Content-Type: application/json' \
     --data '{ "email": "your@email.com" }'
+
+# Windows Powershell
+Invoke-WebRequest `
+    -Method POST `
+    -Uri 'http://localhost:8080/delete' `
+    -Headers @{'Content-Type' = 'application/json'} `
+    -Body '{"email": "your@email.com"}'
 ```
 
 **Responses:**
 
-- `200 OK`: User successfully deleted.
+- `200 OK`: User deleted successfully.
 - `400 Bad Request`: Invalid request body / email is missing.
 - `404 Not Found`: Email not Found.
 
@@ -125,6 +169,12 @@ curl \
     --request GET \
     --url http://localhost:8080/users \
     --header "Authorization: Bearer <jwtToken>"
+
+# Windows Powershell
+Invoke-WebRequest `
+    -Method GET `
+    -Uri 'http://localhost:8080/users' `
+    -Headers @{ 'Authorization' = 'Bearer <jwtToken>' }
 ```
 
 **Responses:**
