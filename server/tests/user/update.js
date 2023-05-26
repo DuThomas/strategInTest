@@ -2,7 +2,8 @@ import chai, { use } from 'chai'
 import chaiHttp from 'chai-http'
 import app from '../../index.js'
 import User from '../../models/user.js'
-import mongoose, { startSession } from 'mongoose'
+import { startSession } from 'mongoose'
+import { afterEach } from 'mocha'
 
 const { expect } = chai
 
@@ -20,10 +21,8 @@ describe('POST /update', () => {
     const password = 'testPassword132'
     const user = new User({ email, password })
     try {
-      // Clear users
-      await User.deleteMany()
-      // Add user to db
-      await user.save()
+      await User.deleteMany() // Clear users
+      await user.save() // Add user to db
     } catch (error) {
       throw new Error(error)
     }
@@ -48,7 +47,7 @@ describe('POST /update', () => {
 			const res = await chai.request(app)
 				.post('/update')
 				.send({ email, newEmail, newPassword })
-				
+
 			expect(res).to.have.status(200)
 			expect(res.body).to.be.an('object')
 			expect(res.body).to.have.property('message', 'User\'s data updated successfully')

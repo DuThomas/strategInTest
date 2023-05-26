@@ -72,7 +72,7 @@ export const login = async (req, res) => {
 
 
 export const updateUser = async (req, res) => {
-  // console.log("update");
+  // console.log("update")
 
   // try {
   //   const users = await User.find()

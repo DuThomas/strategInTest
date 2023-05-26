@@ -2,7 +2,7 @@ import chai, { use } from 'chai'
 import chaiHttp from 'chai-http'
 import app from '../../index.js'
 import User from '../../models/user.js'
-import mongoose from 'mongoose'
+import { startSession } from 'mongoose'
 import { afterEach } from 'mocha'
 
 const { expect } = chai
@@ -11,22 +11,35 @@ chai.use(chaiHttp)
 chai.should()
 
 describe('POST /register', () => {
+	let session
+
 	const user = {
     email: 'test@example.com',
     password: 'myPassword'
   }
   const {email, password} = user
 
-	beforeEach((done) => {
-		// Clear db
-		mongoose.connection.collections.users.drop(() => {
-				done()
-		})
-	})
+	beforeEach(async () => {
+    session = await startSession()
+    session.startTransaction()
 
-	afterEach((done) => {
-		done()
-	})
+    try {
+      // Clear users
+      await User.deleteMany()
+    } catch (error) {
+      throw new Error(error)
+    }
+  })
+
+  afterEach(async () => {
+    try {
+      await session.commitTransaction()
+    } catch (error) {
+      await session.abortTransaction()
+    } finally {
+      session.endSession()
+    }
+  })
 
 	it('should register a new user with valid email and password', (done) => {
 		chai.request(app)
