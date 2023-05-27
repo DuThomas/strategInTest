@@ -43,7 +43,7 @@ describe('POST /delete', () => {
       try {
         const email = 'test123@example.com'
         const res = await chai.request(app)
-          .post('/delete')
+          .delete('/delete')
           .send({ email })
 
         expect(res).to.have.status(200)
@@ -59,7 +59,7 @@ describe('POST /delete', () => {
     try {
       const email = "not.existing@email.com"
       const res = await chai.request(app)
-        .post('/delete')
+        .delete('/delete')
         .send({ email })
   
       expect(res).to.have.status(404)
@@ -73,7 +73,7 @@ describe('POST /delete', () => {
   it('should return an error if email not given', async () => {
     try {
       const res = await chai.request(app)
-        .post('/delete')
+        .delete('/delete')
         .send()
   
       expect(res).to.have.status(400)

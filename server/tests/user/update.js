@@ -9,7 +9,7 @@ const { expect } = chai
 
 chai.use(chaiHttp)
 
-describe('POST /update', () => {
+describe('put /update', () => {
 	let session
 	const email = 'test123@example.com'
   const password = 'testPassword132'
@@ -43,7 +43,7 @@ describe('POST /update', () => {
 			const newPassword = 'newPassword'
 	
 			const res = await chai.request(app)
-				.post('/update')
+				.put('/update')
 				.send({ email, newEmail, newPassword })
 
 			expect(res).to.have.status(200)
@@ -65,7 +65,7 @@ describe('POST /update', () => {
 			const newEmail = 'test123@example.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.post('/update')
+				.put('/update')
 				.send({ newEmail, newPassword })
 				
 			expect(res).to.have.status(400)
@@ -82,7 +82,7 @@ describe('POST /update', () => {
 			const newEmail = 'new@email.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.post('/update')
+				.put('/update')
 				.send({ email, newEmail, newPassword })
 				
 			expect(res).to.have.status(400)
@@ -99,7 +99,7 @@ describe('POST /update', () => {
 			const newEmail = 'new@email.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.post('/update')
+				.put('/update')
 				.send({ email, newEmail, newPassword })
 				
 					expect(res).to.have.status(404)
@@ -115,7 +115,7 @@ describe('POST /update', () => {
 			const email = 'test123@example.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.post('/update')
+				.put('/update')
 				.send({ email, newPassword })
 				
 			expect(res).to.have.status(400)
@@ -132,7 +132,7 @@ describe('POST /update', () => {
 			const newEmail = 'invalidEmail'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.post('/update')
+				.put('/update')
 				.send({ email, newEmail, newPassword })
 				
 			expect(res).to.have.status(400)
@@ -152,7 +152,7 @@ describe('POST /update', () => {
 			const user = new User({ email: newEmail, password: newPassword })
 			await user.save()
 			const res = await chai.request(app)
-					.post('/update')
+					.put('/update')
 					.send({ email, newEmail, newPassword })
 					
 				expect(res).to.have.status(400)
@@ -168,7 +168,7 @@ describe('POST /update', () => {
 			const email = 'test123@example.com'
 			const newEmail = 'new@email.com'
 			const res = await chai.request(app)
-				.post('/update')
+				.put('/update')
 				.send({ email, newEmail })
 		
 			expect(res).to.have.status(400)
@@ -186,7 +186,7 @@ describe('POST /update', () => {
 			const newPassword = '123'
 	
 			const res = await chai.request(app)
-				.post('/update')
+				.put('/update')
 				.send({ email, newEmail, newPassword })
 
 			expect(res).to.have.status(400)
