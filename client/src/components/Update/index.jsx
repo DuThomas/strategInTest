@@ -16,7 +16,7 @@ const Update = () => {
 		e.preventDefault()
 		try {
 			const res = await fetch('http://localhost:8080/update', {
-				method: 'POST',
+				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
 				},

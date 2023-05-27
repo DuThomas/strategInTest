@@ -15,7 +15,7 @@ const Delete = () => {
 		e.preventDefault()
 		try {
 			const res = await fetch('http://localhost:8080/delete', {
-				method: 'POST',
+				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json'
 				},
