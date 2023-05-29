@@ -97,7 +97,7 @@ Invoke-WebRequest `
 
 ### Update user
 
-**Endpoint:** `POST /update`
+**Endpoint:** `PUT /update`
 
 Updates user's data with the given email.
 
@@ -106,14 +106,14 @@ Updates user's data with the given email.
 
 # Unix
 curl \
-    --request POST \
+    --request PUT \
     --url http://localhost:8080/update \
     --header 'Content-Type: application/json' \
     --data ' "email": "your@email.com", "newEmail": "your.new@email.com", "newPassword": "yourNewPassword" }'
 
 # Windows Powershell
 Invoke-WebRequest `
-    -Method POST `
+    -Method PUT `
     -Uri 'http://localhost:8080/update' `
     -Headers @{'Content-Type' = 'application/json'} `
     -Body '{ "email": "your@email.com", "newEmail": "your.new@email.com", "newPassword": "yourNewPassword" }'
@@ -127,7 +127,7 @@ Invoke-WebRequest `
 
 ### Delete user
 
-**Endpoint:** `POST /delete`
+**Endpoint:** `DELETE /delete`
 
 Deletes a user with the given email.
 
@@ -136,14 +136,14 @@ Deletes a user with the given email.
 
 # Unix
 curl \
-    --request POST \
+    --request DELETE \
     --url http://localhost:8080/delete \
     --header 'Content-Type: application/json' \
     --data '{ "email": "your@email.com" }'
 
 # Windows Powershell
 Invoke-WebRequest `
-    -Method POST `
+    -Method DELETE `
     -Uri 'http://localhost:8080/delete' `
     -Headers @{'Content-Type' = 'application/json'} `
     -Body '{"email": "your@email.com"}'
