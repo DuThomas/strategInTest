@@ -6,6 +6,7 @@ import Users from "./components/Users"
 import Delete from "./components/Delete"
 import Update from "./components/Update"
 import GanttPage from "./components/Gantt"
+import Projects from "./components/Projects"
 
 function App() {
 	return (
@@ -17,6 +18,7 @@ function App() {
 			<Route path="/delete" exact element={<Delete />} />
 			<Route path="/update" exact element={<Update />} />
 			<Route path="/gantt" exact element={<GanttPage />} />
+			<Route path="/projects" exact element={<Projects />} />
 		</Routes>
 	)
 }
