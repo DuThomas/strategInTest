@@ -4,6 +4,8 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import userRoutes from './routes/user.js'
+import taskRoutes from './routes/task.js'
+import projectRoutes from './routes/project.js'
 
 connection() // Connnect to DB
 
@@ -15,6 +17,8 @@ app.use(cookieParser())
 app.use(cors())
 
 app.use('/', userRoutes)
+app.use('/task', taskRoutes)
+app.use('/project', projectRoutes)
 
 app.use((req, res) => {
   res.status(404).json({
