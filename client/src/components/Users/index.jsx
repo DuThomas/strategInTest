@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom"
-import RedirectLogin from "../RedirectLogin"
 import React, { useEffect, useState } from 'react'
 import Protected from "../Protected"
 
 const Users = () => {
 	const [users, setUsers] = useState([])
 	const jwtToken = localStorage.getItem("token")
-	console.log("JWT", jwtToken);
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {

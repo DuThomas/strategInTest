@@ -10,7 +10,8 @@ router
     res.status(200).json({
       message: "Homepage"
     })
-})
+  })
+
 router
   .route('/register')
   .get((req, res) => {
@@ -20,7 +21,7 @@ router
   })
   .post([
     check("email", "Email is required and must be valid").exists().isEmail(),
-    check("password", "Password is required and should be at least 8 characters").exists().isLength({min: 8})
+    check("password", "Password is required and should be at least 8 characters").exists().isLength({ min: 8 })
   ], register)
 
 router
@@ -32,15 +33,15 @@ router
   })
   .post([
     check("email", "Email is required and must be valid").exists().isEmail(),
-    check("password", "Password is required and should be at least 8 characters").exists().isLength({min: 8})
+    check("password", "Password is required and should be at least 8 characters").exists().isLength({ min: 8 })
   ], login)
 
-  router
+router
   .route('/update')
   .put([
     check("_id", "User ID is required").exists(),
     check("newEmail", "New email is required and must be valid").exists().isEmail(),
-    check("newPassword", "New password is required and should be at least 8 characters").exists().isLength({min: 8})
+    check("newPassword", "New password is required and should be at least 8 characters").exists().isLength({ min: 8 })
   ], updateUser)
 
 router

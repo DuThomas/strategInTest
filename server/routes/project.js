@@ -6,7 +6,7 @@ router
   .route('/create')
   .post(createProject)
 
-  router
+router
   .route('/update')
   .put(updateProject)
 

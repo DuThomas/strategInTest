@@ -3,7 +3,6 @@ import UserForm from "../../InputContainer"
 import Input from "../../Input"
 
 const Login = () => {
-	console.log(process.env.TEST)
 	const [data, setData] = useState({ email: "", password: "" })
 	const [error_msg, setError_msg] = useState("")
 

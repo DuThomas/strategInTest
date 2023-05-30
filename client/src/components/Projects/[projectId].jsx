@@ -5,8 +5,8 @@ import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 import "./project.css"
 import { Link, useParams } from 'react-router-dom'
 import Protected from '../Protected'
-import { createTask, deleteTask, updateTask } from './taskController'
-import { createLink, deleteLink, updateLink } from './linkController'
+import { createTask, deleteTask, updateTask } from '../../controllers/taskController'
+import { createLink, deleteLink, updateLink } from '../../controllers/linkController'
 
 const GanttPage = () => {
 	const [project, setProject] = useState([])
@@ -41,8 +41,6 @@ const GanttPage = () => {
       deleteLink(link.id)
     })
 
-
-
     const fetchProjectTasks = async () => {
 			try {
 				const taskRes = await fetch('http://localhost:8080/task/projectTasks', {
@@ -54,7 +52,7 @@ const GanttPage = () => {
 				})
 				const tasksData = await taskRes.json()
 
-        const formattedTasks = tasksData.projectTasks.map(task => ({
+        const formattedTasks = tasksData.projectTasks?.map(task => ({
           ...task,
           start_date: moment(task.start_date).format('DD-MM-YYYY'),
         }))

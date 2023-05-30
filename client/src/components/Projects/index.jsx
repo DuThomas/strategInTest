@@ -25,8 +25,6 @@ const Projects = () => {
 		fetchProjects()
   }, [])
 
-
-
   return (
     <Protected>
       <div className='main_container'>

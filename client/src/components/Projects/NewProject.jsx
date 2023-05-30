@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState } from 'react'
 import '../../index.css'
 import UserForm from '../InputContainer'
 import Input from '../Input'

@@ -4,7 +4,7 @@ export const createLink = async (link, projectId) => {
             ...link,
             project_id: projectId,
         }
-        const res = await fetch('http://localhost:8080/link/create', {
+        await fetch('http://localhost:8080/link/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -18,7 +18,7 @@ export const createLink = async (link, projectId) => {
 
 export const updateLink = async (link) => {
     try {
-        const res = await fetch('http://localhost:8080/link/update', {
+        await fetch('http://localhost:8080/link/update', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ export const updateLink = async (link) => {
 
 export const deleteLink = async (id) => {
     try {
-        const res = await fetch('http://localhost:8080/link/delete', {
+        await fetch('http://localhost:8080/link/delete', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

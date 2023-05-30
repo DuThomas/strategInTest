@@ -1,11 +1,9 @@
 import { Link, useParams } from "react-router-dom"
 import React, { useEffect, useState } from 'react'
-import RedirectLogin from "../../RedirectLogin"
 import Protected from "../../Protected"
 
 const UserProfile = () => {
 	const [user, setUser] = useState({})
-	const jwtToken = localStorage.getItem("token")
 	const { userId } = useParams()
 	useEffect(() => {
 		const fetchUser = async () => {
@@ -30,15 +28,13 @@ const UserProfile = () => {
 
 	const deleteUser = async () => {
 		try {
-			const res = await fetch('http://localhost:8080/delete', {
+			await fetch('http://localhost:8080/delete', {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({ email: user.email })
 			})
-
-			// const resData = await res.json()
 		} catch (error) {
 			throw new Error(error)
 		}

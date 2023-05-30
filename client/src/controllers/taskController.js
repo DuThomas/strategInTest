@@ -8,7 +8,7 @@ export const createTask = async (item, projectId) => {
             duration: item.duration,
             progress: item.progress
         }
-        const res = await fetch('http://localhost:8080/task/create', {
+        await fetch('http://localhost:8080/task/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ export const updateTask = async (item) => {
             duration: item.duration,
             progress: item.progress
         }
-        const res = await fetch('http://localhost:8080/task/update', {
+        await fetch('http://localhost:8080/task/update', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -43,15 +43,13 @@ export const updateTask = async (item) => {
 
 export const deleteTask = async (id) => {
     try {
-        const res = await fetch('http://localhost:8080/task/delete', {
+        await fetch('http://localhost:8080/task/delete', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ id })
         })
-
-        const resData = await res.json()
     } catch (error) {
         throw new Error(error)
     }
