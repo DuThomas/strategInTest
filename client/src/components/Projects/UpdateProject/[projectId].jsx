@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from 'react'
-import { Link, Router, useHistory, useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import '../../../index.css'
-import UserForm from '../../UserForm'
+import UserForm from '../../InputContainer'
 import Input from '../../Input'
 import Protected from '../../Protected'
 
@@ -14,7 +14,6 @@ const UpdateProjectForm = () => {
 		setProject({ ...project, [input.name]: input.value })
 	}
 
-	console.log(projectId);
 	useEffect(() => {
 		const fetchProject = async () => {
 			try {
@@ -27,7 +26,6 @@ const UpdateProjectForm = () => {
 				})
 				const data = await res.json()
 				setProject(data.project)
-				console.log("fetch project: ", data);
 
 			} catch (error) {
 				throw new Error(error)

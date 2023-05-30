@@ -2,7 +2,7 @@ import React from 'react'
 import "../index.css"
 import { Link } from 'react-router-dom'
 
-const UserForm = ({ title, inputs, handleSubmit, error_msg, success_msg, btn_text, cancelPage }) => {
+const InputContainer = ({ title, inputs, handleSubmit, error_msg, success_msg, btn_text, cancelPage }) => {
     return (
       <div className='login_container'>
         <form className="form_container" onSubmit={handleSubmit}>
@@ -23,4 +23,4 @@ const UserForm = ({ title, inputs, handleSubmit, error_msg, success_msg, btn_tex
     )
   }
   
-  export default UserForm
+  export default InputContainer

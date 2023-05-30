@@ -1,11 +1,9 @@
-import { useState, useEffect, useContext } from 'react'
-import { Link, Router } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import '../../index.css'
-import RedirectLogin from '../RedirectLogin'
 import Protected from '../Protected'
 
 const Projects = () => {
-  const jwtToken = localStorage.getItem("token")
   const [projects, setProjects] = useState([])
 
   useEffect(() => {
@@ -19,7 +17,6 @@ const Projects = () => {
 				})
 				const data = await res.json()
         setProjects(data.projects)
-        console.log(data);
 
 			} catch (error) {
 				throw new Error(error)

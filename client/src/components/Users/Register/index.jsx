@@ -1,5 +1,5 @@
 import { useState } from "react"
-import UserForm from "../../UserForm"
+import UserForm from "../../InputContainer"
 import Input from "../../Input"
 
 const Register = () => {

@@ -1,9 +1,11 @@
 import Link from "../models/link.js"
+import task from "../models/task.js"
 
 export const createLink = async (req, res) => {
-	const { project_id, source, target, type } = req.body
+	const { id, project_id, source, target, type } = req.body
 	try {
 		const newLink = new Link({
+            id,
 			project_id,
 			source,
 			target,
@@ -69,9 +71,9 @@ export const updateLink = async (req, res) => {
 
 
 export const deleteLink = async (req, res) => {
-  const { _id } = req.body
+  const { id } = req.body
   try {
-    const deletedLink = await Link.findOneAndDelete({ _id })
+    const deletedLink = await Link.findOneAndDelete({ id })
 
     if(!deletedLink){
       return res.status(404).json({
@@ -92,8 +94,8 @@ export const deleteLink = async (req, res) => {
 
 export const deleteLinksByTaskId = async (taskId) => {
     try {
-      const deletedTaskLinks = await Link.deleteMany({ $or: [{ sourceTask: taskId }, { targetTask: taskId }] })
+      const deletedTaskLinks = await Link.deleteMany({ $or: [{ source: taskId }, { target: taskId }] })
     } catch (error) {
-        throw new Error("Failed to delete linkks.");
+        throw new Error(error)
     }
-  };
+  }

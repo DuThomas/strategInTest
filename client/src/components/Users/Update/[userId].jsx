@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import UserForm from "../../UserForm"
+import UserForm from "../../InputContainer"
 import Input from "../../Input"
 import { useParams } from "react-router-dom"
 import Protected from "../../Protected"
@@ -21,9 +21,8 @@ const Update = () => {
 					body: JSON.stringify({ _id: userId })
 				})
 				const data = await res.json()
-				console.log("data", data);
 				if (data.user.length > 0) {
-					setData({ newEmail: data.user[0].email })
+					setData({ newEmail: data.user[0].email, newPassword: "" })
 				}
 			} catch (error) {
 				throw new Error(error)

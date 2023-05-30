@@ -89,6 +89,8 @@ export const updateTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
   const { id } = req.body
   try {
+
+    await deleteLinksByTaskId(id)
     const deletedTask = await Task.findOneAndDelete({ id })
 
     if(!deletedTask){
@@ -113,10 +115,10 @@ export const deleteTasksByProjectId = async (projectId) => {
     const tasksToDelete = await Task.find({project_id: projectId})
     await Task.deleteMany({ project_id: projectId })
     for (const task of tasksToDelete) {
-      await deleteLinksByTaskId(task._id);
+      await deleteLinksByTaskId(task.id)
     }
   } catch (error) {
-    throw new Error("Failed to delete tasks.");
+    throw new Error("Failed to delete tasks.")
   }
 }
 

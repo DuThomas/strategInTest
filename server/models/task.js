@@ -3,6 +3,7 @@ import mongoose, { Schema, model } from 'mongoose'
 const taskSchema = new Schema({
 	id: {
 		type: Number,
+		unique: true,
 		required: true
 	},
 	project_id: {

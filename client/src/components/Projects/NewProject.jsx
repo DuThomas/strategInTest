@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react'
-import { Link, Router, useHistory } from 'react-router-dom'
 import '../../index.css'
-import UserForm from '../UserForm'
+import UserForm from '../InputContainer'
 import Input from '../Input'
 import Protected from '../Protected'
 

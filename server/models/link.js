@@ -1,6 +1,11 @@
 import mongoose, { Schema, model } from 'mongoose'
 
 const linkSchema = new Schema({
+    id: {
+		type: Number,
+        unique: true,
+		required: true
+	},
     project_id: {
         type: mongoose.Schema.Types.ObjectId,
         required: true

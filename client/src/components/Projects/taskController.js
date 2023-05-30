@@ -8,7 +8,6 @@ export const createTask = async (item, projectId) => {
             duration: item.duration,
             progress: item.progress
         }
-        console.log("create item", item, {...item});
         const res = await fetch('http://localhost:8080/task/create', {
             method: 'POST',
             headers: {
@@ -16,9 +15,6 @@ export const createTask = async (item, projectId) => {
             },
             body: JSON.stringify(task)
         })
-
-        const resData = await res.json()
-        console.log(resData)
     } catch (error) {
         throw new Error(error)
     }
@@ -33,7 +29,6 @@ export const updateTask = async (item) => {
             duration: item.duration,
             progress: item.progress
         }
-        console.log("update item", item);
         const res = await fetch('http://localhost:8080/task/update', {
             method: 'PUT',
             headers: {
@@ -41,8 +36,6 @@ export const updateTask = async (item) => {
             },
             body: JSON.stringify(task)
         })
-        const resData = await res.json()
-        console.log("resData:", resData)
     } catch (error) {
         throw new Error(error)
     }
