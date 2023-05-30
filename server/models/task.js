@@ -1,11 +1,15 @@
 import mongoose, { Schema, model } from 'mongoose'
 
 const taskSchema = new Schema({
+	id: {
+		type: Number,
+		required: true
+	},
 	project_id: {
-    type: mongoose.Schema.Types.ObjectId,
-    // ref: 'Project',
-    required: true
-  },
+		type: mongoose.Schema.Types.ObjectId,
+		// ref: 'Project',
+		required: true
+	},
 	text: {
 		type: String,
 		required: true
@@ -21,7 +25,7 @@ const taskSchema = new Schema({
 	progress: {
 		type: Number,
 		default: 0
-	  }
+	}
 })
 
 export default model('Task', taskSchema)

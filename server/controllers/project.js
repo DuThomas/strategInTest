@@ -1,9 +1,9 @@
 import Project from "../models/project.js"
+import { deleteTasksByProjectId } from "./task.js"
 
 
 export const createProject = async (req, res) => {
 	const { title } = req.body
-  console.log(req.body);
 	try {
 		const newProject = new Project({ title })
 
@@ -54,7 +54,6 @@ export const getProject = async (req, res) => {
 
 
 export const updateProject = async (req, res) => {
-  console.log(req.body);
   const { _id, title } = req.body
   
   try {
@@ -84,8 +83,8 @@ export const updateProject = async (req, res) => {
 export const deleteProject = async (req, res) => {
   const { _id } = req.body
   try {
+    await deleteTasksByProjectId(_id)
     const deletedProject = await Project.findOneAndDelete({ _id })
-
     if(!deletedProject){
       return res.status(404).json({
         error: 'Project not found',

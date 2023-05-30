@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import userRoutes from './routes/user.js'
 import taskRoutes from './routes/task.js'
+import linkRoutes from './routes/link.js'
 import projectRoutes from './routes/project.js'
 
 connection() // Connnect to DB
@@ -18,6 +19,7 @@ app.use(cors())
 
 app.use('/', userRoutes)
 app.use('/task', taskRoutes)
+app.use('/link', linkRoutes)
 app.use('/project', projectRoutes)
 
 app.use((req, res) => {
