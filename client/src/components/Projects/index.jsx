@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import { Link, Router } from 'react-router-dom'
 import '../../index.css'
 import RedirectLogin from '../RedirectLogin'
+import Protected from '../Protected'
 
 const Projects = () => {
   const jwtToken = localStorage.getItem("token")
@@ -30,25 +31,21 @@ const Projects = () => {
 
 
   return (
-    <div>
-      {jwtToken?
-        <div className='main_container'>
-          <div className='projects_container'>
-            <h1 className=''> Liste des projets </h1>
-            <div >
-              {projects.map((project) => (
-                <div key={project._id}>
-                  {'>'}<Link to={`/projects/${project._id}`}>{project.title}</Link>
-                </div>
-              ))}
-            </div>
-            <Link to={`/newProject`} className="blue_btn">Nouveau projet</Link>
+    <Protected>
+      <div className='main_container'>
+        <div className='projects_container'>
+          <h1 className=''> Liste des projets </h1>
+          <div >
+            {projects?.map((project) => (
+              <div key={project._id}>
+                {'>'}<Link to={`/projects/${project._id}`}>{project.title}</Link>
+              </div>
+            ))}
           </div>
+          <Link to={`/newProject`} className="blue_btn">Nouveau projet</Link>
         </div>
-        :
-        <RedirectLogin/>
-      }  
-    </div>
+      </div>
+    </Protected>
   ) 
 }
 

@@ -4,6 +4,7 @@ import moment from 'moment'
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 import "./project.css"
 import { Link, useParams } from 'react-router-dom'
+import Protected from '../Protected'
 
 const GanttPage = () => {
 	const [project, setProject] = useState([])
@@ -100,6 +101,18 @@ const GanttPage = () => {
       deleteTask(item._id)
     })
 
+    gantt.attachEvent('onAfterLinkAdd', (id, link) => {
+      console.log('Nouveau lien créé :', link);
+    })
+
+    gantt.attachEvent('onAfterLinkUpdate', (id, link) => {
+      console.log('Lien mis à jour :', link);
+    })
+
+    gantt.attachEvent('onAfterLinkDelete', (id, link) => {
+      console.log('Nouveau lien suprimé :', link);
+    })
+
     const fetchProjectTasks = async () => {
 			try {
 				const res = await fetch('http://localhost:8080/task/projectTasks', {
@@ -107,7 +120,7 @@ const GanttPage = () => {
           headers: {
             'Content-Type': 'application/json'
           },
-					body: JSON.stringify({projectId})
+					body: JSON.stringify({ projectId })
 				})
 				const data = await res.json()
 				console.log("fetch data :", data)
@@ -116,8 +129,10 @@ const GanttPage = () => {
           ...task,
           start_date: moment(task.start_date).format('DD-MM-YYYY'),
         }))
+
+        const links = [{'source': '1685455698438', 'target': '1685455698439', 'type': '0', 'id': 1685455698443}]
 				gantt.clearAll()
-        gantt.parse({ data: formattedTasks })
+        gantt.parse({ data: formattedTasks, links })
 			} catch (error) {
 				throw new Error(error)
 			}
@@ -166,14 +181,16 @@ const GanttPage = () => {
   }
 
   return (
-    <div className='project_view'>
-			<h1>{project.title}</h1>
-      <div id="gantt-container" style={{ width: '100%', height: '500px' }} />
-      <div style={{ display: 'flex',  justifyContent: 'center', alignItems: 'center' , gap: '10px'}}>
-        <Link to={`/updateProject/${project._id}`} className="blue_btn">Renommer le projet</Link>
-        <button className='red_btn' onClick={deleteProject}>Supprimer le projet</button>
+    <Protected>
+      <div className='project_view'>
+        <h1>{project.title}</h1>
+        <div id="gantt-container" style={{ width: '100%', height: '500px' }} />
+        <div style={{ display: 'flex',  justifyContent: 'center', alignItems: 'center' , gap: '10px'}}>
+          <Link to={`/updateProject/${project._id}`} className="blue_btn">Renommer le projet</Link>
+          <button className='red_btn' onClick={deleteProject}>Supprimer le projet</button>
+        </div>
       </div>
-    </div>
+    </Protected>
     )
 }
 

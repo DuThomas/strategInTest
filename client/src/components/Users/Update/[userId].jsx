@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import UserForm from "../../UserForm"
 import Input from "../../Input"
 import { useParams } from "react-router-dom"
+import Protected from "../../Protected"
 
 const Update = () => {
 	const [data, setData] = useState({ newEmail: "", newPassword: "" })
@@ -71,15 +72,17 @@ const Update = () => {
 	]
 
 	return (
-		<UserForm
-			title="Modification"
-			inputs={inputs}
-			handleSubmit={handleSubmit}
-			error_msg={error_msg}
-			success_msg={update_msg}
-			btn_text="Enregistrer"
-			cancelPage={`/user/${userId}`}
-		/>
+		<Protected>
+			<UserForm
+				title="Modification"
+				inputs={inputs}
+				handleSubmit={handleSubmit}
+				error_msg={error_msg}
+				success_msg={update_msg}
+				btn_text="Enregistrer"
+				cancelPage={`/user/${userId}`}
+			/>
+		</Protected>
 	)
 }
 

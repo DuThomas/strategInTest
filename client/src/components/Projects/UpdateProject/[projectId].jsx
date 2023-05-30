@@ -3,6 +3,7 @@ import { Link, Router, useHistory, useParams } from 'react-router-dom'
 import '../../../index.css'
 import UserForm from '../../UserForm'
 import Input from '../../Input'
+import Protected from '../../Protected'
 
 const UpdateProjectForm = () => {
 	const [project, setProject] = useState({ title: "" })
@@ -66,14 +67,16 @@ const UpdateProjectForm = () => {
 	]
 
 	return (
-		<UserForm
-			title="Renommer le Projet"
-			handleSubmit={handleSubmit}
-			inputs={inputs}
-			btn_text="Enregistrer"
-			error_msg={error_msg}
-			cancelPage={`/projects/${projectId}`}
-		/>
+		<Protected>
+			<UserForm
+				title="Renommer le Projet"
+				handleSubmit={handleSubmit}
+				inputs={inputs}
+				btn_text="Enregistrer"
+				error_msg={error_msg}
+				cancelPage={`/projects/${projectId}`}
+			/>
+		</Protected>
 	)
 }
 

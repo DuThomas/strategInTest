@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom"
 import React, { useEffect, useState } from 'react'
 import RedirectLogin from "../../RedirectLogin"
+import Protected from "../../Protected"
 
 const UserProfile = () => {
 	const [user, setUser] = useState({})
@@ -45,23 +46,19 @@ const UserProfile = () => {
 	}
 
 	return (
-		<div>
-			{jwtToken?
-				<div className="main_container">
-					<div className="form_container">
-						<h1>Profil</h1>
-						<div>Email : {user.email}</div>
-						<div>Mot de passe : **************</div>
-						<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-							<Link to={`/updateUser/${user._id}`} className="blue_btn">Modifier</Link>
-							<button className='red_btn' onClick={deleteUser}>Supprimer</button>
-						</div>
+		<Protected>
+			<div className="main_container">
+				<div className="form_container">
+					<h1>Profil</h1>
+					<div>Email : {user.email}</div>
+					<div>Mot de passe : **************</div>
+					<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+						<Link to={`/updateUser/${user._id}`} className="blue_btn">Modifier</Link>
+						<button className='red_btn' onClick={deleteUser}>Supprimer</button>
 					</div>
 				</div>
-				:
-				<RedirectLogin />
-			}
-		</div>
+			</div>
+		</Protected>
 	)
 }
 
