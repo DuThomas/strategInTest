@@ -6,10 +6,6 @@ const taskSchema = new Schema({
     // ref: 'Project',
     required: true
   },
-// 	project_id: {
-//     type: Number,
-//     required: true
-//   },
 	text: {
 		type: String,
 		required: true
@@ -21,7 +17,11 @@ const taskSchema = new Schema({
 	duration: {
 		type: Number,
 		required: true
-	}
+	},
+	progress: {
+		type: Number,
+		default: 0
+	  }
 })
 
 export default model('Task', taskSchema)

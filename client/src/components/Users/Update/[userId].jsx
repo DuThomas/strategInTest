@@ -1,11 +1,35 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import UserForm from "../../UserForm"
 import Input from "../../Input"
+import { useParams } from "react-router-dom"
 
 const Update = () => {
-	const [data, setData] = useState({ email: "", newEmail: "", newPassword: "" })
+	const [data, setData] = useState({ newEmail: "", newPassword: "" })
 	const [error_msg, setError_msg] = useState("")
 	const [update_msg, setUpdated_msg] = useState("")
+	const { userId } = useParams()
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const res = await fetch('http://localhost:8080/users', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ _id: userId })
+				})
+				const data = await res.json()
+				console.log("data", data);
+				if (data.user.length > 0) {
+					setData({ newEmail: data.user[0].email })
+				}
+			} catch (error) {
+				throw new Error(error)
+			}
+		}
+		fetchUser()
+	}, [])
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value })
@@ -19,17 +43,16 @@ const Update = () => {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(data)
+				body: JSON.stringify({ ...data, _id: userId })
 			})
 			const resData = await res.json()
-			if(resData.error){
+			if (resData.error) {
 				setError_msg(resData.error)
 				setUpdated_msg('')
 			}
 			else {
 				setError_msg("")
 				setUpdated_msg('Données mis à jour')
-				setData({ email: "", newEmail: "", newPassword: "" })
 			}
 		} catch (error) {
 			throw new Error(error)
@@ -37,10 +60,6 @@ const Update = () => {
 	}
 
 	const inputs = [
-		<Input type="email"
-			placeholder="Email" name="email"
-			onChange={handleChange} value={data.email}
-		/>,
 		<Input type="email"
 			placeholder="Nouveau Email" name="newEmail"
 			onChange={handleChange} value={data.newEmail}
@@ -59,7 +78,7 @@ const Update = () => {
 			error_msg={error_msg}
 			success_msg={update_msg}
 			btn_text="Enregistrer"
-			cancelPage="/"
+			cancelPage={`/user/${userId}`}
 		/>
 	)
 }

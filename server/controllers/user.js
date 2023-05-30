@@ -79,14 +79,16 @@ export const login = async (req, res) => {
 
 
 export const updateUser = async (req, res) => {
+
+  console.log(req.body);
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).json({
       error: errors.array()[0].msg
     })
   }
-
-  const { email, newEmail, newPassword } = req.body
+  
+  const { _id, newEmail, newPassword } = req.body
   try {
     const userWithSameNewEmail = await User.findOne({ email: newEmail})
     if (userWithSameNewEmail) {
@@ -102,7 +104,7 @@ export const updateUser = async (req, res) => {
   
   try {
     const updatedUser = await User.findOneAndUpdate(
-      { email },
+      { _id },
       { email: newEmail, password: newPassword },
       { new: true } // updated user will be returned
     )

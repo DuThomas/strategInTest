@@ -7,7 +7,7 @@ const UserProfile = () => {
 	const jwtToken = localStorage.getItem("token")
 	const { userId } = useParams()
 	useEffect(() => {
-		const fetchUsers = async () => {
+		const fetchUser = async () => {
 			try {
 				const res = await fetch('http://localhost:8080/users', {
 					method: 'POST',
@@ -24,7 +24,7 @@ const UserProfile = () => {
 				throw new Error(error)
 			}
 		}
-		fetchUsers()
+		fetchUser()
 	}, [])
 
 	const deleteUser = async () => {
@@ -48,10 +48,14 @@ const UserProfile = () => {
 		<div>
 			{jwtToken?
 				<div className="main_container">
-					<div className="projects_container">
+					<div className="form_container">
 						<h1>Profil</h1>
 						<div>Email : {user.email}</div>
-						<button className='red_btn' onClick={deleteUser}>Supprimer le compte</button>
+						<div>Mot de passe : **************</div>
+						<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+							<Link to={`/updateUser/${user._id}`} className="blue_btn">Modifier</Link>
+							<button className='red_btn' onClick={deleteUser}>Supprimer</button>
+						</div>
 					</div>
 				</div>
 				:

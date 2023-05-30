@@ -29,6 +29,13 @@ code {
 	padding: 10px;
 	border-radius: 8px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+	gap: 20px;
+	margin: 20px;
+	min-width: 300px;
+}
+
+.form_container h1{
+	margin: 0;
 }
 
 .input {

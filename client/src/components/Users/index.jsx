@@ -37,6 +37,7 @@ const Users = () => {
 								</li>
 							))}
 						</ul>
+						<Link to={`/register`} className="blue_btn">Nouveau compte</Link>
 					</div>
 				</div>
 				:

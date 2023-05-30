@@ -22,7 +22,8 @@ const GanttPage = () => {
         project_id: projectId,
         text: item.text,
         start_date: item.start_date,
-        duration: item.duration
+        duration: item.duration,
+        progress: item.progress
       }
 
       console.log(task)
@@ -54,7 +55,8 @@ const GanttPage = () => {
         project_id: item.project_id,
         text: item.text,
         start_date: item.start_date,
-        duration: item.duration
+        duration: item.duration,
+        progress: item.progress
       }
 
       const updateTask = async () => {

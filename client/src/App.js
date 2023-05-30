@@ -4,12 +4,12 @@ import Register from "./components/Users/Register"
 import Login from "./components/Users/Login"
 import Users from "./components/Users"
 import Delete from "./components/Users/Delete"
-import Update from "./components/Users/Update"
 import Projects from "./components/Projects"
 import GanttPage from "./components/Projects/[projectId]"
 import ProjectForm from "./components/Projects/NewProject"
 import UpdateProjectForm from "./components/Projects/UpdateProject/[projectId]"
 import UserProfile from "./components/Users/Profile"
+import Update from "./components/Users/Update/[userId]"
 
 function App() {
 	return (
@@ -19,7 +19,7 @@ function App() {
 			<Route path="/login" exact element={<Login />} />
 			<Route path="/users" exact element={<Users />} />
 			<Route path="/delete" exact element={<Delete />} />
-			<Route path="/userUpdate" exact element={<Update />} />
+			<Route path="/updateUser/:userId" exact element={<Update />} />
 			<Route path="/user/:userId" exact element={<UserProfile />} />
 			{/* <Route path="/gantt" exact element={<GanttPage />} /> */}
 			<Route path="/projects" exact element={<Projects />} />

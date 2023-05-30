@@ -43,7 +43,6 @@ router
     })
   })
   .put([
-    check("email", "Email is required and must be valid").exists().isEmail(),
     check("newEmail", "New email is required and must be valid").exists().isEmail(),
     check("newPassword", "New password is required and should be at least 8 characters").exists().isLength({min: 8})
   ], updateUser)

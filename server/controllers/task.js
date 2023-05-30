@@ -1,14 +1,15 @@
 import Task from "../models/task.js"
 
 export const createTask = async (req, res) => {
-	const { project_id, text, start_date, duration } = req.body
+	const { project_id, text, start_date, duration, progress } = req.body
   console.log(req.body);
 	try {
 		const newTask = new Task({
 			project_id,
 			text,
 			start_date,
-			duration
+			duration,
+      progress
 		})
 
 		const savedTask = await newTask.save()
@@ -60,12 +61,12 @@ export const getProjectTasks = async (req, res) => {
 
 
 export const updateTask = async (req, res) => {
-  const { _id, text, start_date, duration } = req.body
+  const { _id, text, start_date, duration, progress } = req.body
   
   try {
     const updatedTask = await Task.findOneAndUpdate(
       { _id },
-      { text, start_date, duration },
+      { text, start_date, duration, progress },
       { new: true } // updated task will be returned
     )
     if (!updatedTask) {
