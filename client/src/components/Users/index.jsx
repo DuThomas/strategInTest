@@ -1,23 +1,13 @@
-import styles from "./styles.module.css"
+import { Link } from "react-router-dom"
+import RedirectLogin from "../RedirectLogin"
 import React, { useEffect, useState } from 'react'
 
 const Users = () => {
-	const handleLogout = () => {
-		localStorage.removeItem("token")
-		window.location = 'http://localhost:3000'
-	}
-
-	const handleLogin = () => {
-		localStorage.removeItem("token")
-		window.location = 'http://localhost:3000/login'
-	}
-
 	const [users, setUsers] = useState([])
+	const jwtToken = localStorage.getItem("token")
 
-  useEffect(() => {
-		const jwtToken = localStorage.getItem("token")
-
-    const fetchUsers = async () => {
+	useEffect(() => {
+		const fetchUsers = async () => {
 			try {
 				const res = await fetch('http://localhost:8080/users', {
 					method: 'GET',
@@ -26,36 +16,31 @@ const Users = () => {
 					}
 				})
 				const data = await res.json()
-				setUsers(data.emails)
+				setUsers(data.users)
 			} catch (error) {
 				throw new Error(error)
 			}
 		}
 		fetchUsers()
-  }, [])
+	}, [])
 
 	return (
 		<div>
-			{
-				users?
-				<div>
-					<h2>Liste des utilisateurs</h2>
-					<ul>
-						{users.map((user, index) => (
-							<li key={index}>{user}</li>
-						))}
-					</ul>
-					<button className={styles.btn} onClick={handleLogout}>
-						Se Déconnecter
-					</button>
+			{jwtToken?
+				<div className="main_container">
+					<div className="projects_container">
+						<h1>Liste des utilisateurs</h1>
+						<ul>
+							{users.map((user, index) => (
+								<li key={user._id}>
+									<Link to={`/user/${user._id}`}>{user.email}</Link>
+								</li>
+							))}
+						</ul>
+					</div>
 				</div>
 				:
-				<div>
-					<h2>Veuillez vous connecter pour accéder à la listes des utilisateurs</h2>
-					<button className={styles.btn} onClick={handleLogin}>
-						Se Connecter
-					</button>
-				</div>
+				<RedirectLogin />
 			}
 		</div>
 	)

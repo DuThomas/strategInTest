@@ -1,4 +1,4 @@
-import { register, login, getUsers, deleteUser, updateUser } from "../controllers/user.js"
+import { register, login, getUsers, deleteUser, updateUser, getUser } from "../controllers/user.js"
 import { Router } from "express"
 import { check } from 'express-validator'
 import auth from '../middleware/auth.js'
@@ -55,5 +55,6 @@ router
 router
   .route('/users')
   .get(auth, getUsers)
+  .post(getUser)
 
 export default router

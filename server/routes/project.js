@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { createProject, deleteProject, getProjects, updateProject } from "../controllers/project.js"
+import { createProject, deleteProject, getProject, getProjects, updateProject } from "../controllers/project.js"
 const router = Router()
 
 router
@@ -17,5 +17,6 @@ router
 router
   .route('/')
   .get(getProjects)
+  .post(getProject)
 
 export default router

@@ -125,8 +125,8 @@ export const updateUser = async (req, res) => {
 
 
 export const deleteUser = async (req, res) => {
+  console.log(req.body);
   const { email } = req.body
-
   if (!email) {
     return res.status(400).json({
       error: 'Email is required',
@@ -153,14 +153,30 @@ export const deleteUser = async (req, res) => {
 }
 
 
-export const getUsers = async (req, res) => {
+export const getUser = async (req, res) => {
   try {
-    const users = await User.find()
-    const emails = users.map(user => user.email)
+    const { _id } = req.body
+    const user = await User.find({ _id })
 
     return res.status(200).json({
       message: 'Success',
-      emails
+      user
+    })
+  } catch (error) {
+    return res.status(400).json({
+      error: error.message
+    })
+  }
+}
+
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find()
+
+    return res.status(200).json({
+      message: 'Success',
+      users
     })
   } catch (error) {
     return res.status(400).json({

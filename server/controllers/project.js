@@ -3,6 +3,7 @@ import Project from "../models/project.js"
 
 export const createProject = async (req, res) => {
 	const { title } = req.body
+  console.log(req.body);
 	try {
 		const newProject = new Project({ title })
 
@@ -35,8 +36,25 @@ export const getProjects = async (req, res) => {
   }
 }
 
+export const getProject = async (req, res) => {
+  try {
+    const { _id } = req.body
+    const project = await Project.findOne({ _id })
+
+    return res.status(200).json({
+      message: 'Success',
+      project
+    })
+  } catch (error) {
+    return res.status(400).json({
+      error: error.message
+    })
+  }
+}
+
 
 export const updateProject = async (req, res) => {
+  console.log(req.body);
   const { _id, title } = req.body
   
   try {

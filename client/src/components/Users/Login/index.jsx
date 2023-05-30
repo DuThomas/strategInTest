@@ -1,7 +1,6 @@
 import { useState } from "react"
-import EmailInput from "../EmailInput"
-import PwdInput from "../PwdInput"
-import UserForm from "../UserForm"
+import UserForm from "../../UserForm"
+import Input from "../../Input"
 
 const Login = () => {
 	console.log(process.env.TEST)
@@ -37,11 +36,11 @@ const Login = () => {
 	}
 
 	const inputs = [
-		<EmailInput
+		<Input type="email"
 			placeholder="Email" name="email"
 			onChange={handleChange} value={data.email}
 		/>,
-		<PwdInput
+		<Input type="password"
 			placeholder="Mot de passe" name="password"
 			onChange={handleChange} value={data.password}
 		/>
@@ -54,6 +53,7 @@ const Login = () => {
 			handleSubmit={handleSubmit}
 			error_msg={error_msg}
 			btn_text="Se connecter"
+			cancelPage="/"
 		/>
 	)
 }

@@ -2,6 +2,7 @@ import Task from "../models/task.js"
 
 export const createTask = async (req, res) => {
 	const { project_id, text, start_date, duration } = req.body
+  console.log(req.body);
 	try {
 		const newTask = new Task({
 			project_id,
@@ -31,6 +32,24 @@ export const getTasks = async (req, res) => {
     return res.status(200).json({
       message: 'Success',
       tasks
+    })
+  } catch (error) {
+    return res.status(400).json({
+      error: error.message
+    })
+  }
+}
+
+export const getProjectTasks = async (req, res) => {
+  try {
+    console.log("get tasks")
+    console.log("getProjectTasks : ", req.body)
+    const { projectId } = req.body
+    const projectTasks = await Task.find({ project_id: projectId })
+
+    return res.status(200).json({
+      message: 'Success',
+      projectTasks
     })
   } catch (error) {
     return res.status(400).json({

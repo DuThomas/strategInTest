@@ -1,6 +1,6 @@
 import { useState } from "react"
-import EmailInput from "../EmailInput"
-import UserForm from "../UserForm"
+import UserForm from "../../UserForm"
+import Input from "../../Input"
 
 const Delete = () => {
 	const [data, setData] = useState({ email: ""})
@@ -38,7 +38,7 @@ const Delete = () => {
 	}
 	
 	const inputs = [
-		<EmailInput
+		<Input type="email"
 			placeholder="Email" name="email"
 			onChange={handleChange} value={data.email}
 		/>
@@ -52,6 +52,7 @@ const Delete = () => {
 			error_msg={error_msg}
 			success_msg={deleted_msg}
 			btn_text="Supprimer"
+			cancelPage="/"
 		/>
 	)
 }

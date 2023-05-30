@@ -51,7 +51,7 @@ describe('User API', () => {
     
         expect(usersRes).to.have.status(200)
         expect(usersRes.body).to.be.an('object')
-        expect(usersRes.body).to.have.property('emails').that.is.an('array')
+        expect(usersRes.body).to.have.property('users').that.is.an('array')
       } catch (error) {
         throw new Error(error)
       }

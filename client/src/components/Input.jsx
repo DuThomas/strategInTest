@@ -1,10 +1,10 @@
 import React from "react"
 import "../index.css"
 
-const EmailInput = ({ placeholder, name, value, onChange }) => {
+const Input = ({ type, placeholder, name, value, onChange }) => {
   return (
     <input
-      type="email"
+      type={type}
       placeholder={placeholder}
       name={name}
       value={value}
@@ -15,4 +15,4 @@ const EmailInput = ({ placeholder, name, value, onChange }) => {
   )
 }
 
-export default EmailInput
+export default Input

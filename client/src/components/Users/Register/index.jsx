@@ -1,7 +1,6 @@
 import { useState } from "react"
-import EmailInput from "../EmailInput"
-import PwdInput from "../PwdInput"
-import UserForm from "../UserForm"
+import UserForm from "../../UserForm"
+import Input from "../../Input"
 
 const Register = () => {
 	const [data, setData] = useState({ email: "", password: "" })
@@ -35,11 +34,11 @@ const Register = () => {
 	}
 
 	const inputs = [
-		<EmailInput
+		<Input type="email"
 			placeholder="Email" name="email"
 			onChange={handleChange} value={data.email}
 		/>,
-		<PwdInput
+		<Input type="password"
 			placeholder="Mot de passe" name="password"
 			onChange={handleChange} value={data.password}
 		/>
@@ -51,7 +50,8 @@ const Register = () => {
 			inputs={inputs}
 			handleSubmit={handleSubmit}
 			error_msg={error_msg}
-			btn_text="s'enregistrer"
+			btn_text="S'enregistrer"
+			cancelPage="/"
 		/>
 	)
 }
