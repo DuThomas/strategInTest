@@ -1,6 +1,6 @@
 import RedirectLogin from "./RedirectLogin"
 
-export default function Protected({ children }) {
+const Protected = ({ children }) => {
     if (localStorage.getItem("token")) {
         return (
             <div >
@@ -14,3 +14,5 @@ export default function Protected({ children }) {
         )
     }
 }
+
+export default Protected

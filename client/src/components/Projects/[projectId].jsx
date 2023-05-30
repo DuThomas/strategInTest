@@ -184,7 +184,7 @@ const GanttPage = () => {
     <Protected>
       <div className='project_view'>
         <h1>{project.title}</h1>
-        <div id="gantt-container" style={{ width: '100%', height: '500px' }} />
+        <div id="gantt-container" style={{ width: '100%', height: '400px' }} />
         <div style={{ display: 'flex',  justifyContent: 'center', alignItems: 'center' , gap: '10px'}}>
           <Link to={`/updateProject/${project._id}`} className="blue_btn">Renommer le projet</Link>
           <button className='red_btn' onClick={deleteProject}>Supprimer le projet</button>
