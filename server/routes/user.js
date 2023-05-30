@@ -37,12 +37,8 @@ router
 
   router
   .route('/update')
-  .get((req, res) => {
-    return res.status(200).json({
-      message: "login page",
-    })
-  })
   .put([
+    check("_id", "User ID is required").exists(),
     check("newEmail", "New email is required and must be valid").exists().isEmail(),
     check("newPassword", "New password is required and should be at least 8 characters").exists().isLength({min: 8})
   ], updateUser)

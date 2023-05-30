@@ -12,46 +12,46 @@ chai.use(chaiHttp)
 describe('put /update', () => {
 	let session
 	const email = 'test123@example.com'
-  const password = 'testPassword132'
+	const password = 'testPassword132'
 
 	beforeEach(async () => {
-    session = await startSession()
-    session.startTransaction()
-    const user = new User({ email, password })
-    try {
-      await User.deleteMany() // Clear users
-      await user.save() // Add user to db
-    } catch (error) {
-      throw new Error(error)
-    }
-  })
+		session = await startSession()
+		session.startTransaction()
+		const defaultUser = new User({ email, password })
+		try {
+			await User.deleteMany() // Clear users
+			await defaultUser.save() // Add user to db
+		} catch (error) {
+			throw new Error(error)
+		}
+	})
 
-  afterEach(async () => {
-    try {
-      await session.commitTransaction()
-    } catch (error) {
-      await session.abortTransaction()
-    } finally {
-      session.endSession()
-    }
-  })
+	afterEach(async () => {
+		try {
+			await session.commitTransaction()
+		} catch (error) {
+			await session.abortTransaction()
+		} finally {
+			session.endSession()
+		}
+	})
 
 	it('should update user\'s data and return that updated user if new data is correct', async () => {
 		try {
-			const email = 'test123@example.com'
+			const defaultUser = await User.findOne()
 			const newEmail = 'new@email.com'
 			const newPassword = 'newPassword'
-	
+
 			const res = await chai.request(app)
 				.put('/update')
-				.send({ email, newEmail, newPassword })
+				.send({ _id: defaultUser._id, newEmail, newPassword })
 
 			expect(res).to.have.status(200)
 			expect(res.body).to.be.an('object')
 			expect(res.body).to.have.property('message', 'User\'s data updated successfully')
 			expect(res.body).to.have.property('updatedUser')
 
-			const user = await User.findOne({email: newEmail})
+			const user = await User.findOne({ email: newEmail })
 			const { encryptedPassword } = res.body.updatedUser
 			expect(user).to.deep.include({ email: newEmail })
 			expect(user.encryptedPassword).to.equal(encryptedPassword)
@@ -60,51 +60,50 @@ describe('put /update', () => {
 		}
 	})
 
-	it('should return an error if email is not given', async () => {
+	it('should return an error if _id is not given', async () => {
 		try {
 			const newEmail = 'test123@example.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
 				.put('/update')
 				.send({ newEmail, newPassword })
-				
+
 			expect(res).to.have.status(400)
 			expect(res.body).to.be.an('object')
-			expect(res.body).to.have.property('error', 'Email is required and must be valid')
+			expect(res.body).to.have.property('error', 'User ID is required')
 		} catch (error) {
 			throw new Error(error)
 		}
 	})
 
-	it('should return an error if email is not valid', async () => {
+	it('should return an error if _id is not valid', async () => {
 		try {
-			const email = 'invalidEmail'
+			const _id = 'invaliId'
 			const newEmail = 'new@email.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
 				.put('/update')
-				.send({ email, newEmail, newPassword })
-				
+				.send({ _id, newEmail, newPassword })
+
 			expect(res).to.have.status(400)
 			expect(res.body).to.be.an('object')
-			expect(res.body).to.have.property('error', 'Email is required and must be valid')
+			expect(res.body).to.have.property('error')
 		} catch (error) {
 			throw new Error(error)
 		}
 	})
 
-	it('should return an error if email does not exist', async () => {
+	it('should return an error if _id does not exist', async () => {
 		try {
-			const email = "not.existing@email.com"
+			const notExistingId = '6475f80bb51d2ee169714f34'
 			const newEmail = 'new@email.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
 				.put('/update')
-				.send({ email, newEmail, newPassword })
-				
-					expect(res).to.have.status(404)
-					expect(res.body).to.be.an('object')
-					expect(res.body).to.have.property('error', 'Email not found')
+				.send({ _id: notExistingId, newEmail, newPassword })
+			expect(res).to.have.status(404)
+			expect(res.body).to.be.an('object')
+			expect(res.body).to.have.property('error', 'User not found')
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -112,12 +111,12 @@ describe('put /update', () => {
 
 	it('should return an error if new email is not given', async () => {
 		try {
-			const email = 'test123@example.com'
+			const defaultUser = await User.findOne()
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
 				.put('/update')
-				.send({ email, newPassword })
-				
+				.send({ _id: defaultUser._id, newPassword })
+
 			expect(res).to.have.status(400)
 			expect(res.body).to.be.an('object')
 			expect(res.body).to.have.property('error', 'New email is required and must be valid')
@@ -128,13 +127,13 @@ describe('put /update', () => {
 
 	it('should return an error if new email is not valid', async () => {
 		try {
-			const email = 'test123@example.com'
+			const defaultUser = await User.findOne()
 			const newEmail = 'invalidEmail'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
 				.put('/update')
-				.send({ email, newEmail, newPassword })
-				
+				.send({ _id: defaultUser._id, newEmail, newPassword })
+
 			expect(res).to.have.status(400)
 			expect(res.body).to.be.an('object')
 			expect(res.body).to.have.property('error', 'New email is required and must be valid')
@@ -145,19 +144,19 @@ describe('put /update', () => {
 
 	it('should return an error if new email is already used', async () => {
 		try {
-			const email = 'test123@example.com'
+			const defaultUser = await User.findOne()
 			const newEmail = 'new@email.com'
 			const newPassword = 'newPassword'
-	
+
 			const user = new User({ email: newEmail, password: newPassword })
 			await user.save()
 			const res = await chai.request(app)
-					.put('/update')
-					.send({ email, newEmail, newPassword })
-					
-				expect(res).to.have.status(400)
-				expect(res.body).to.be.an('object')
-				expect(res.body).to.have.property('error', 'New email is already used')
+				.put('/update')
+				.send({ _id: defaultUser._id, newEmail, newPassword })
+
+			expect(res).to.have.status(400)
+			expect(res.body).to.be.an('object')
+			expect(res.body).to.have.property('error', 'New email is already used')
 		} catch (error) {
 			throw new Error(error)
 		}
@@ -165,12 +164,12 @@ describe('put /update', () => {
 
 	it('should return an error if new password is not given', async () => {
 		try {
-			const email = 'test123@example.com'
+			const defaultUser = await User.findOne()
 			const newEmail = 'new@email.com'
 			const res = await chai.request(app)
 				.put('/update')
-				.send({ email, newEmail })
-		
+				.send({ _id: defaultUser._id, newEmail })
+
 			expect(res).to.have.status(400)
 			expect(res.body).to.be.an('object')
 			expect(res.body).to.have.property('error', 'New password is required and should be at least 8 characters')
@@ -181,17 +180,17 @@ describe('put /update', () => {
 
 	it('should return an error if new password is not valid', async () => {
 		try {
-			const email = 'test123@example.com'
+			const defaultUser = await User.findOne()
 			const newEmail = 'new@email.com'
 			const newPassword = '123'
-	
+
 			const res = await chai.request(app)
 				.put('/update')
-				.send({ email, newEmail, newPassword })
+				.send({ _id: defaultUser._id, newEmail, newPassword })
 
 			expect(res).to.have.status(400)
 			expect(res.body).to.be.an('object')
-			expect(res.body).to.have.property('error','New password is required and should be at least 8 characters')
+			expect(res.body).to.have.property('error', 'New password is required and should be at least 8 characters')
 		} catch (error) {
 			throw new Error(error)
 		}

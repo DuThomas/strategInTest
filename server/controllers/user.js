@@ -79,8 +79,6 @@ export const login = async (req, res) => {
 
 
 export const updateUser = async (req, res) => {
-
-  console.log(req.body);
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).json({
@@ -101,7 +99,6 @@ export const updateUser = async (req, res) => {
       error: error.message
     })
   }
-  
   try {
     const updatedUser = await User.findOneAndUpdate(
       { _id },
@@ -110,7 +107,7 @@ export const updateUser = async (req, res) => {
     )
     if (!updatedUser) {
       return res.status(404).json({
-        error: 'Email not found'
+        error: 'User not found'
       })
     }
 
@@ -127,7 +124,6 @@ export const updateUser = async (req, res) => {
 
 
 export const deleteUser = async (req, res) => {
-  console.log(req.body);
   const { email } = req.body
   if (!email) {
     return res.status(400).json({
