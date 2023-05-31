@@ -38,7 +38,7 @@ const Update = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const res = await fetch('http://localhost:8080/update', {
+			const res = await fetch('http://localhost:8080/', {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'

@@ -9,7 +9,7 @@ export const createTask = async (item, projectId) => {
             parent: item.parent,
             progress: item.progress
         }
-        await fetch('http://localhost:8080/task/create', {
+        await fetch('http://localhost:8080/task/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ export const updateTask = async (item) => {
             duration: item.duration,
             progress: item.progress
         }
-        await fetch('http://localhost:8080/task/update', {
+        await fetch('http://localhost:8080/task/', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ export const updateTask = async (item) => {
 
 export const deleteTask = async (id) => {
     try {
-        await fetch('http://localhost:8080/task/delete', {
+        await fetch('http://localhost:8080/task/', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

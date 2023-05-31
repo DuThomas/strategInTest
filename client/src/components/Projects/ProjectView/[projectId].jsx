@@ -43,7 +43,7 @@ const ProjectView = () => {
 
     const fetchProjectTasks = async () => {
 			try {
-				const taskRes = await fetch('http://localhost:8080/task/projectTasks', {
+				const taskRes = await fetch('http://localhost:8080/task/fetch', {
 					method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ const ProjectView = () => {
           start_date: moment(task.start_date).format('DD-MM-YYYY'),
         }))
 
-        const linksRes = await fetch('http://localhost:8080/link/projectLinks', {
+        const linksRes = await fetch('http://localhost:8080/link/fetch', {
 					method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ const ProjectView = () => {
 
 		const fetchProject = async () => {
 			try {
-				const res = await fetch('http://localhost:8080/project', {
+				const res = await fetch('http://localhost:8080/project/fetch', {
 					method: 'POST',
           headers: {
             'Content-Type': 'application/json'

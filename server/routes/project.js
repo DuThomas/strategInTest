@@ -3,19 +3,13 @@ import { createProject, deleteProject, getProject, getProjects, updateProject } 
 const router = Router()
 
 router
-  .route('/create')
+  .route('/')
   .post(createProject)
-
-router
-  .route('/update')
   .put(updateProject)
-
-router
-  .route('/delete')
   .delete(deleteProject)
 
 router
-  .route('/')
+  .route('/fetch')
   .get(getProjects)
   .post(getProject)
 

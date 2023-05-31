@@ -30,7 +30,7 @@ const UserProfile = () => {
 
 	const deleteUser = async () => {
 		try {
-			await fetch((API_URL + '/delete'), {
+			await fetch((API_URL + '/'), {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json'

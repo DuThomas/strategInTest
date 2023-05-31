@@ -3,22 +3,14 @@ import { createTask, deleteTask, getProjectTasks, getTasks, updateTask } from ".
 const router = Router()
 
 router
-  .route('/create')
+  .route('/')
   .post(createTask)
-router
-  .route('/update')
   .put(updateTask)
-
-router
-  .route('/delete')
   .delete(deleteTask)
 
 router
-  .route('/tasks')
+  .route('/fetch')
   .get(getTasks)
-
-router
-  .route('/projectTasks')
   .post(getProjectTasks)
 
 export default router

@@ -3,19 +3,13 @@ import { createLink, deleteLink, getProjectLinks, updateLink } from "../controll
 const router = Router()
 
 router
-    .route('/create')
+    .route('/')
     .post(createLink)
-
-router
-    .route('/update')
     .put(updateLink)
-
-router
-    .route('/delete')
     .delete(deleteLink)
 
 router
-    .route('/projectLinks')
+    .route('/fetch')
     .post(getProjectLinks)
 
 export default router

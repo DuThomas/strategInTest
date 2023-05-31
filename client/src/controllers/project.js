@@ -1,6 +1,6 @@
 export const deleteProject = async (_id) => {
     try {
-        await fetch('http://localhost:8080/project/delete', {
+        await fetch('http://localhost:8080/project/', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

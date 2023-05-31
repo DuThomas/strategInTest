@@ -17,7 +17,7 @@ const UpdateProjectForm = () => {
 	useEffect(() => {
 		const fetchProject = async () => {
 			try {
-				const res = await fetch('http://localhost:8080/project/', {
+				const res = await fetch('http://localhost:8080/project/fetch', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ const UpdateProjectForm = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {
-			const res = await fetch('http://localhost:8080/project/update', {
+			const res = await fetch('http://localhost:8080/project/', {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'

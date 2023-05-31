@@ -9,7 +9,7 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
 			try {
-				const res = await fetch('http://localhost:8080/project', {
+				const res = await fetch('http://localhost:8080/project/fetch', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
