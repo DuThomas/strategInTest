@@ -19,9 +19,9 @@ describe('User API', () => {
     session.startTransaction()
 
     try {
-      const user = new User({ email, password })
+      const defaultUser = new User({ email, password })
       await User.deleteMany() // Clear users
-      await user.save() // Add user to db
+      await defaultUser.save() // Add user to db
     } catch (error) {
       throw new Error(error)
     }
@@ -80,30 +80,6 @@ describe('User API', () => {
         expect(res).to.have.status(401)
         expect(res.body).to.be.an('object')
         expect(res.body).to.have.property('error', 'No token')
-      } catch (error) {
-        throw new Error(error)
-      }
-    })
-  })
-
-  describe('GET /login', () => {
-    try {
-      it('should access to /login', async () => {
-        const res = await chai.request(app)
-          .get('/login')
-        expect(res).to.have.status(200)
-      })
-    } catch (error) {
-      throw new Error(error)
-    }
-  })
-  
-  describe('GET /register', () => {
-    it('should access to /register', async () => {
-      try {
-        const res = await chai.request(app)
-          .get('/register')
-        expect(res).to.have.status(200)
       } catch (error) {
         throw new Error(error)
       }

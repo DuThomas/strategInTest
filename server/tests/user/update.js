@@ -9,7 +9,7 @@ const { expect } = chai
 
 chai.use(chaiHttp)
 
-describe('put /update', () => {
+describe('PUT /', () => {
 	let session
 	const email = 'test123@example.com'
 	const password = 'testPassword132'
@@ -43,7 +43,7 @@ describe('put /update', () => {
 			const newPassword = 'newPassword'
 
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ _id: defaultUser._id, newEmail, newPassword })
 
 			expect(res).to.have.status(200)
@@ -65,7 +65,7 @@ describe('put /update', () => {
 			const newEmail = 'test123@example.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ newEmail, newPassword })
 
 			expect(res).to.have.status(400)
@@ -82,7 +82,7 @@ describe('put /update', () => {
 			const newEmail = 'new@email.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ _id, newEmail, newPassword })
 
 			expect(res).to.have.status(400)
@@ -99,7 +99,7 @@ describe('put /update', () => {
 			const newEmail = 'new@email.com'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ _id: notExistingId, newEmail, newPassword })
 			expect(res).to.have.status(404)
 			expect(res.body).to.be.an('object')
@@ -114,7 +114,7 @@ describe('put /update', () => {
 			const defaultUser = await User.findOne()
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ _id: defaultUser._id, newPassword })
 
 			expect(res).to.have.status(400)
@@ -131,7 +131,7 @@ describe('put /update', () => {
 			const newEmail = 'invalidEmail'
 			const newPassword = 'newPassword'
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ _id: defaultUser._id, newEmail, newPassword })
 
 			expect(res).to.have.status(400)
@@ -151,7 +151,7 @@ describe('put /update', () => {
 			const user = new User({ email: newEmail, password: newPassword })
 			await user.save()
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ _id: defaultUser._id, newEmail, newPassword })
 
 			expect(res).to.have.status(400)
@@ -167,7 +167,7 @@ describe('put /update', () => {
 			const defaultUser = await User.findOne()
 			const newEmail = 'new@email.com'
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ _id: defaultUser._id, newEmail })
 
 			expect(res).to.have.status(400)
@@ -185,7 +185,7 @@ describe('put /update', () => {
 			const newPassword = '123'
 
 			const res = await chai.request(app)
-				.put('/update')
+				.put('/')
 				.send({ _id: defaultUser._id, newEmail, newPassword })
 
 			expect(res).to.have.status(400)

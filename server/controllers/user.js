@@ -90,7 +90,7 @@ export const updateUser = async (req, res) => {
   const { _id, newEmail, newPassword } = req.body
   try {
     const userWithSameNewEmail = await User.findOne({ email: newEmail})
-    if (userWithSameNewEmail) {
+    if (userWithSameNewEmail && !(userWithSameNewEmail._id == _id)) {
       return res.status(400).json({
         error: "New email is already used"
       })
@@ -100,6 +100,7 @@ export const updateUser = async (req, res) => {
       error: error.message
     })
   }
+
   try {
     const updatedUser = await User.findOneAndUpdate(
       { _id },
@@ -125,19 +126,19 @@ export const updateUser = async (req, res) => {
 
 
 export const deleteUser = async (req, res) => {
-  const { email } = req.body
-  if (!email) {
+  const { _id } = req.body
+  if (!_id) {
     return res.status(400).json({
-      error: 'Email is required',
+      error: 'User ID is required',
     })
   }
 
   try {
-    const deletedUser = await User.findOneAndDelete({ email })
+    const deletedUser = await User.findOneAndDelete({ _id })
 
     if(!deletedUser){
       return res.status(404).json({
-        error: 'Email not found',
+        error: 'User not found',
       })
     }
     return res.status(200).json({

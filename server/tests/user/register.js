@@ -9,7 +9,7 @@ const { expect } = chai
 
 chai.use(chaiHttp)
 
-describe('POST /register', () => {
+describe('POST /', () => {
 	let session
 	const email = 'test123@example.com'
 	const password = 'testPassword132'
@@ -23,8 +23,7 @@ describe('POST /register', () => {
     session.startTransaction()
 
     try {
-      // Clear users
-      await User.deleteMany()
+      await User.deleteMany() // Clear users
     } catch (error) {
       throw new Error(error)
     }
@@ -43,7 +42,7 @@ describe('POST /register', () => {
 	it('should register a new user with valid email and password', async () => {
 		try {
 			const res = await chai.request(app)
-				.post('/register')
+				.post('/')
 				.send(user)
 	
 			expect(res).to.have.status(201)
@@ -58,7 +57,7 @@ describe('POST /register', () => {
 	it('should return an error if email is not given', async () => {
 		try {
 			const res = await chai.request(app)
-				.post('/register')
+				.post('/')
 				.send({ password })
 	
 			expect(res).to.have.status(400)
@@ -73,7 +72,7 @@ describe('POST /register', () => {
 		try {
 			await new User(user).save() // add an user
 			const res = await chai.request(app) // add that user again
-				.post('/register')
+				.post('/')
 				.send(user)
 	
 			expect(res).to.have.status(409)
@@ -87,7 +86,7 @@ describe('POST /register', () => {
 	it('should return an error if email is not valid', async () => {
 		try {
 			const res = await chai.request(app)
-				.post('/register')
+				.post('/')
 				.send({
 					email: invalidEmail,
 					password
@@ -103,7 +102,7 @@ describe('POST /register', () => {
 	it('should return an error if password is not given', async () => {
 		try {
 			const res = await chai.request(app)
-				.post('/register')
+				.post('/')
 				.send({ email })
 
 			expect(res).to.have.status(400)
@@ -116,7 +115,7 @@ describe('POST /register', () => {
 
 	it('should return an error if password is less than 8 characters', async () => {
 		const res = await chai.request(app)
-			.post('/register')
+			.post('/')
 			.send({
 				email,
 				password: invalidPassord
