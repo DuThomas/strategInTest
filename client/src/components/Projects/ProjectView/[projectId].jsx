@@ -5,8 +5,9 @@ import 'dhtmlx-gantt/codebase/dhtmlxgantt.css'
 import "../project.css"
 import { Link, useParams } from 'react-router-dom'
 import Protected from '../../Protected'
-import { createTask, deleteTask, updateTask } from '../../../controllers/taskController'
-import { createLink, deleteLink, updateLink } from '../../../controllers/linkController'
+import { createTask, deleteTask, updateTask } from '../../../controllers/task.js'
+import { createLink, deleteLink, updateLink } from '../../../controllers/link.js'
+import { deleteProject } from '../../../controllers/project'
 
 const ProjectView = () => {
 	const [project, setProject] = useState([])
@@ -93,21 +94,6 @@ const ProjectView = () => {
 		fetchProject()
   }, [])
 
-  const deleteProject = async () => {
-    try {
-			await fetch('http://localhost:8080/project/delete', {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({ _id: projectId })
-			})
-      window.location = "http://localhost:3000/projects"
-		} catch (error) {
-			throw new Error(error)
-		}
-  }
-
   return (
     <Protected>
       <div className='project_view'>
@@ -115,7 +101,7 @@ const ProjectView = () => {
         <div id="gantt-container" style={{ width: '100%', height: '400px' }} />
         <div style={{ display: 'flex',  justifyContent: 'center', alignItems: 'center' , gap: '10px'}}>
           <Link to={`/updateProject/${project._id}`} className="blue_btn">Renommer le projet</Link>
-          <button className='red_btn' onClick={deleteProject}>Supprimer le projet</button>
+          <button className='red_btn' onClick={() => deleteProject(projectId)}>Supprimer le projet</button>
         </div>
       </div>
     </Protected>

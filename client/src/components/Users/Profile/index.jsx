@@ -2,13 +2,15 @@ import { Link, useParams } from "react-router-dom"
 import React, { useEffect, useState } from 'react'
 import Protected from "../../Protected"
 
+const API_URL = 'http://localhost:8080'
+
 const UserProfile = () => {
 	const [user, setUser] = useState({})
 	const { userId } = useParams()
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
-				const res = await fetch('http://localhost:8080/users', {
+				const res = await fetch(API_URL + '/users', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -28,7 +30,7 @@ const UserProfile = () => {
 
 	const deleteUser = async () => {
 		try {
-			await fetch('http://localhost:8080/delete', {
+			await fetch((API_URL + '/delete'), {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json'

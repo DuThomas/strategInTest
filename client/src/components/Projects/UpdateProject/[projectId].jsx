@@ -33,7 +33,7 @@ const UpdateProjectForm = () => {
 		}
 		fetchProject()
 	}, [])
-
+	
 	const handleSubmit = async (e) => {
 		e.preventDefault()
 		try {

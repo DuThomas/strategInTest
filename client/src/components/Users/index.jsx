@@ -2,13 +2,15 @@ import { Link } from "react-router-dom"
 import React, { useEffect, useState } from 'react'
 import Protected from "../Protected"
 
+const API_URL = 'http://localhost:8080'
+
 const Users = () => {
 	const [users, setUsers] = useState([])
 	const jwtToken = localStorage.getItem("token")
 	useEffect(() => {
 		const fetchUsers = async () => {
 			try {
-				const res = await fetch('http://localhost:8080/users', {
+				const res = await fetch(API_URL + '/users', {
 					method: 'GET',
 					headers: {
 						Authorization: `Bearer ${jwtToken}`
