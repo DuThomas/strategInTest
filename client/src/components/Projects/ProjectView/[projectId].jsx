@@ -7,7 +7,6 @@ import { Link, useParams } from 'react-router-dom'
 import Protected from '../../Protected'
 import { createTask, deleteTask, updateTask } from '../../../controllers/taskController'
 import { createLink, deleteLink, updateLink } from '../../../controllers/linkController'
-import { fetchProject, fetchProjectTasks } from '../../../controllers/projectController'
 
 const ProjectView = () => {
 	const [project, setProject] = useState([])
@@ -41,8 +40,57 @@ const ProjectView = () => {
       deleteLink(id)
     })
 
-		fetchProjectTasks(projectId)
-		setProject(fetchProject(projectId))
+    const fetchProjectTasks = async () => {
+			try {
+				const taskRes = await fetch('http://localhost:8080/task/projectTasks', {
+					method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+					body: JSON.stringify({ projectId })
+				})
+				const tasksData = await taskRes.json()
+
+        const formattedTasks = tasksData.projectTasks?.map(task => ({
+          ...task,
+          start_date: moment(task.start_date).format('DD-MM-YYYY'),
+        }))
+
+        const linksRes = await fetch('http://localhost:8080/link/projectLinks', {
+					method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+					body: JSON.stringify({ projectId })
+				})
+				const linksData = await linksRes.json()
+
+        const links = linksData.projectLinks
+
+				gantt.clearAll()
+        gantt.parse({ data: formattedTasks, links })
+			} catch (error) {
+				throw new Error(error)
+			}
+		}
+		fetchProjectTasks()
+
+		const fetchProject = async () => {
+			try {
+				const res = await fetch('http://localhost:8080/project', {
+					method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+					body: JSON.stringify({ _id: projectId })
+				})
+				const data = await res.json()
+       	setProject(data.project)
+			} catch (error) {
+				throw new Error(error)
+			}
+		}
+		fetchProject()
   }, [])
 
   const deleteProject = async () => {
