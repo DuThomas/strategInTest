@@ -6,6 +6,7 @@ export const createTask = async (item, projectId) => {
             text: item.text,
             start_date: item.start_date,
             duration: item.duration,
+            parent: item.parent,
             progress: item.progress
         }
         await fetch('http://localhost:8080/task/create', {

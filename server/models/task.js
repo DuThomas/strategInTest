@@ -22,6 +22,10 @@ const taskSchema = new Schema({
 		type: Number,
 		required: true
 	},
+	parent: {
+		type: Number,
+		default: 0
+	},
 	progress: {
 		type: Number,
 		default: 0

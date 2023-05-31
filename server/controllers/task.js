@@ -2,7 +2,7 @@ import Task from "../models/task.js"
 import { deleteLinksByTaskId } from "./link.js"
 
 export const createTask = async (req, res) => {
-	const { id, project_id, text, start_date, duration, progress } = req.body
+	const { id, project_id, text, start_date, duration, parent, progress } = req.body
 	try {
 		const newTask = new Task({
       id,
@@ -10,6 +10,7 @@ export const createTask = async (req, res) => {
 			text,
 			start_date,
 			duration,
+      parent,
       progress
 		})
 
@@ -89,7 +90,7 @@ export const updateTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
   const { id } = req.body
   try {
-
+    await deleteChildTasks(id)
     await deleteLinksByTaskId(id)
     const deletedTask = await Task.findOneAndDelete({ id })
 
@@ -118,7 +119,19 @@ export const deleteTasksByProjectId = async (projectId) => {
       await deleteLinksByTaskId(task.id)
     }
   } catch (error) {
-    throw new Error("Failed to delete tasks.")
+    throw new Error(error)
   }
 }
 
+
+export const deleteChildTasks = async (parentId) => {
+  try {
+    const tasksToDelete = await Task.find({parent: parentId})
+    await Task.deleteMany({ parent: parentId })
+    for (const task of tasksToDelete) {
+      await deleteLinksByTaskId(task.id)
+    }
+  } catch (error) {
+    throw new Error(error)
+  }
+}

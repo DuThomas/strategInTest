@@ -1,5 +1,4 @@
 import Link from "../models/link.js"
-import task from "../models/task.js"
 
 export const createLink = async (req, res) => {
 	const { id, project_id, source, target, type } = req.body
