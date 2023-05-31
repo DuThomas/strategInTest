@@ -31,9 +31,9 @@ const Projects = () => {
         <div className='projects_container'>
           <h1 className=''> Liste des projets </h1>
           <div >
-            {projects?.map((project) => (
-              <div key={project._id}>
-                {'>'}<Link to={`/projects/${project._id}`}>{project.title}</Link>
+            {projects?.map(({ _id, title }) => (
+              <div key={_id}>
+                {'>'}<Link to={`/projects/${_id}`}>{title}</Link>
               </div>
             ))}
           </div>
