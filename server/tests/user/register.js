@@ -8,120 +8,120 @@ import { afterEach } from 'mocha'
 const { expect } = chai
 
 chai.use(chaiHttp)
+export default () =>
+	describe('POST /', () => {
+		let session
+		const email = 'test123@example.com'
+		const password = 'testPassword132'
+		const invalidEmail = "invalidEmail"
+		const invalidPassord = '123'
 
-describe('POST /', () => {
-	let session
-	const email = 'test123@example.com'
-	const password = 'testPassword132'
-	const invalidEmail = "invalidEmail"
-	const invalidPassord = '123'
+		const user = { email, password }
 
-	const user = { email, password }
+		beforeEach(async () => {
+		session = await startSession()
+		session.startTransaction()
 
-	beforeEach(async () => {
-    session = await startSession()
-    session.startTransaction()
-
-    try {
-      await User.deleteMany() // Clear users
-    } catch (error) {
-      throw new Error(error)
-    }
-  })
-
-  afterEach(async () => {
-    try {
-      await session.commitTransaction()
-    } catch (error) {
-      await session.abortTransaction()
-    } finally {
-      session.endSession()
-    }
-  })
-
-	it('should register a new user with valid email and password', async () => {
 		try {
-			const res = await chai.request(app)
-				.post('/')
-				.send(user)
-	
-			expect(res).to.have.status(201)
-			expect(res.body).to.be.an('object')
-			expect(res.body).to.have.property('newUser')
-			expect(res.body.newUser).to.have.property('email').equal(email)
+		await User.deleteMany() // Clear users
 		} catch (error) {
-			throw new Error(error)
+		throw new Error(error)
 		}
 	})
 
-	it('should return an error if email is not given', async () => {
+	afterEach(async () => {
 		try {
-			const res = await chai.request(app)
-				.post('/')
-				.send({ password })
-	
-			expect(res).to.have.status(400)
-			expect(res.body).to.be.an('object')
-			expect(res.body).to.have.property('error', 'Email is required and must be valid')
+		await session.commitTransaction()
 		} catch (error) {
-			throw new Error(error)
+		await session.abortTransaction()
+		} finally {
+		session.endSession()
 		}
 	})
 
-	it('should return an error if email already used', async () => {
-		try {
-			await new User(user).save() // add an user
-			const res = await chai.request(app) // add that user again
-				.post('/')
-				.send(user)
-	
-			expect(res).to.have.status(409)
-			expect(res.body).to.be.an('object')
-			expect(res.body).to.have.property('error', 'Email is already used')
-		} catch (error) {
-			throw new Error(error)
-		}
-	})
+		it('should register a new user with valid email and password', async () => {
+			try {
+				const res = await chai.request(app)
+					.post('/')
+					.send(user)
+		
+				expect(res).to.have.status(201)
+				expect(res.body).to.be.an('object')
+				expect(res.body).to.have.property('newUser')
+				expect(res.body.newUser).to.have.property('email').equal(email)
+			} catch (error) {
+				throw new Error(error)
+			}
+		})
 
-	it('should return an error if email is not valid', async () => {
-		try {
+		it('should return an error if email is not given', async () => {
+			try {
+				const res = await chai.request(app)
+					.post('/')
+					.send({ password })
+		
+				expect(res).to.have.status(400)
+				expect(res.body).to.be.an('object')
+				expect(res.body).to.have.property('error', 'Email is required and must be valid')
+			} catch (error) {
+				throw new Error(error)
+			}
+		})
+
+		it('should return an error if email already used', async () => {
+			try {
+				await new User(user).save() // add an user
+				const res = await chai.request(app) // add that user again
+					.post('/')
+					.send(user)
+		
+				expect(res).to.have.status(409)
+				expect(res.body).to.be.an('object')
+				expect(res.body).to.have.property('error', 'Email is already used')
+			} catch (error) {
+				throw new Error(error)
+			}
+		})
+
+		it('should return an error if email is not valid', async () => {
+			try {
+				const res = await chai.request(app)
+					.post('/')
+					.send({
+						email: invalidEmail,
+						password
+					})
+				expect(res).to.have.status(400)
+				expect(res.body).to.be.an('object')
+				expect(res.body).to.have.property('error', 'Email is required and must be valid')
+			} catch (error) {
+				throw new Error(error)
+			}
+		})
+
+		it('should return an error if password is not given', async () => {
+			try {
+				const res = await chai.request(app)
+					.post('/')
+					.send({ email })
+
+				expect(res).to.have.status(400)
+				expect(res.body).to.be.an('object')
+				expect(res.body).to.have.property('error', 'Password is required and should be at least 8 characters')
+			} catch (error) {
+				throw new Error(error)
+			}
+		})
+
+		it('should return an error if password is less than 8 characters', async () => {
 			const res = await chai.request(app)
 				.post('/')
 				.send({
-					email: invalidEmail,
-					password
+					email,
+					password: invalidPassord
 				})
 			expect(res).to.have.status(400)
 			expect(res.body).to.be.an('object')
-			expect(res.body).to.have.property('error', 'Email is required and must be valid')
-		} catch (error) {
-			throw new Error(error)
-		}
-	})
-
-	it('should return an error if password is not given', async () => {
-		try {
-			const res = await chai.request(app)
-				.post('/')
-				.send({ email })
-
-			expect(res).to.have.status(400)
-			expect(res.body).to.be.an('object')
 			expect(res.body).to.have.property('error', 'Password is required and should be at least 8 characters')
-		} catch (error) {
-			throw new Error(error)
-		}
+		})
 	})
-
-	it('should return an error if password is less than 8 characters', async () => {
-		const res = await chai.request(app)
-			.post('/')
-			.send({
-				email,
-				password: invalidPassord
-			})
-		expect(res).to.have.status(400)
-		expect(res.body).to.be.an('object')
-		expect(res.body).to.have.property('error', 'Password is required and should be at least 8 characters')
-	})
-})
