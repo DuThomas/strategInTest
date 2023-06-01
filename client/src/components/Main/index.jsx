@@ -14,16 +14,16 @@ const Main = () => {
 				<ul>
 					<li> 
 						Au premier accès, l’utilisateur doit se créer un compte (email, mdp) sur la route {" "}
-						<a href="http://localhost:3000/register">/register</a>
+						<a href="/register">/register</a>
 					</li>
 					<li> 
 						Une fois le compte créé, l’utilisateur doit utiliser la route {" "}
-						<a href="http://localhost:3000/login">/login</a> {" "}
+						<a href="/login">/login</a> {" "}
 						pour récupérer un token.
 					</li>
 					<li> 
 						Une fois logué, l’utilisateur peut accéder à la liste des utilisateurs déjà enregistrés sur la plateforme via la route {" "}
-						<a href="http://localhost:3000/users">/users</a>
+						<a href="/users">/users</a>
 					</li>
 				</ul>
 				<h2>

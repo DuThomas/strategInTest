@@ -28,7 +28,7 @@ const ProjectForm = () => {
 				setError_msg(resData.error)
 			}
 			else {
-				window.location = "http://localhost:3000/projects"
+				window.location = "/projects"
 			}
 		} catch (error) {
 			throw new Error(error)

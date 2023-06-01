@@ -30,6 +30,7 @@ export const updateTask = async (item) => {
             duration: item.duration,
             progress: item.progress
         }
+
         await fetch('http://localhost:8080/task/', {
             method: 'PUT',
             headers: {
